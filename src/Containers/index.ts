@@ -1,0 +1,7 @@
+export { default as IndexConsentContainer } from './Consent/Index'
+export { default as IndexStartupContainer } from './Startup/Index'
+export { default as IndexTrainVideoContainer } from './TrainVideo/Index'
+export { default as IndexVideoQuizLandContainer } from './VideoQuizLand/Index'
+export { default as StartLoginScreen } from './StartLoginScreen/Index'
+export { default as RegisterScreen } from './RegisterScreen/Index'
+export { default as LoginScreen } from './LoginScreen/Index'
