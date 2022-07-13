@@ -24,10 +24,9 @@ const frameWidth = windowWidth * 0.8 * 1.25
 const frameHeight = windowWidth * 0.8
 
 const GamePlayScreen = ({ navigation }) => {
-  const [isPaused, setIsPaused] = useState(false)
-  const [lastTouchX, setLastTouchX] = useState(40)
-  const [lastTouchY, setLastTouchY] = useState(40)
-  const [lastScore, setLastScore] = useState(0)
+  const [lastTouchX, setLastTouchX] = useState(null)
+  const [lastTouchY, setLastTouchY] = useState(null)
+  const [lastScore, setLastScore] = useState(null)
   const [quizVisible, setQuizVisible] = useState(true)
   const [modalConfVisible, setModalConfVisible] = useState(false);
 
@@ -61,16 +60,30 @@ const GamePlayScreen = ({ navigation }) => {
                   <Image source={require('../Assets/GameData/1.0-image-clean.jpg')}
                     style={styles.frame} />
                 </View>
+                {lastScore == null &&
+                  <Text style={styles.textOnFrame}>Choose a target point by clicking on this image</Text>
+                }
                 <Image source={require('../Assets/Images/crosshair.png')}
-                  style={[styles.crosshair, { top: lastTouchY - windowWidth * 0.1 / 2, left: lastTouchX - windowWidth * 0.1 / 2 }]} />
+                  style={[styles.crosshair,
+                  {
+                    top: lastTouchY == null ? 200 - windowWidth * 0.1 / 2 : lastTouchY - windowWidth * 0.1 / 2,
+                    left: lastTouchX == null ? 250 - windowWidth * 0.1 / 2 : lastTouchX - windowWidth * 0.1 / 2
+                  }]} />
                 <Image source={require('../Assets/Images/scalpel.png')}
-                  style={[styles.scalpel, { top: lastTouchY + windowWidth * 0.1 / 3, left: lastTouchX + windowWidth * 0.1 / 3 }]} />
+                  style={[styles.scalpel, {
+                    top: lastTouchY == null ? 200 + windowWidth * 0.1 / 3 : lastTouchY + windowWidth * 0.1 / 3,
+                    left: lastTouchX == null ? 250 + windowWidth * 0.1 / 3 : lastTouchX + windowWidth * 0.1 / 3
+                  }]} />
 
               </View>
             ) : (
               <View>
                 <Video source={require('../Assets/Videos/1.0-video-clean.mp4')}
                   style={styles.video}
+                  controls={true}
+                  muted={true}
+                  fullscreenAutorotate={false}
+                  repeat={true}
                 />
               </View>
             )}
@@ -79,7 +92,7 @@ const GamePlayScreen = ({ navigation }) => {
         <View style={styles.IconsContainer}>
           <View style={styles.doneIcon}>
             <Icon reverse color="#0ca284" name="check" type="font-awesome" size={50}
-              disabled={!quizVisible}
+              disabled={!quizVisible || lastScore == null}
               //onPress={() => { Alert.alert("Score: " + String(parseInt(lastScore)) + "%") }}
               onPress={() => setModalConfVisible(true)}
             />
@@ -89,12 +102,12 @@ const GamePlayScreen = ({ navigation }) => {
             {quizVisible ? (
               <View>
                 <Icon reverse name="video" type="entypo" size={50} onPress={() => { setQuizVisible(false) }} />
-                <Text style={{ alignSelf: 'center', marginTop: 6, fontSize: 15, fontWeight: 'bold' }}>Video</Text>
+                <Text style={{ alignSelf: 'center', marginTop: 6, fontSize: 15, fontWeight: 'bold' }}>Play the Video</Text>
               </View>
             ) : (
               <View>
-                <Icon reverse name="game-controller" type="entypo" size={50} onPress={() => { setQuizVisible(true) }} />
-                <Text style={{ alignSelf: 'center', marginTop: 6, fontSize: 15, fontWeight: 'bold' }}>Game</Text>
+                <Icon reverse name="hair-cross" type="entypo" size={50} onPress={() => { setQuizVisible(true) }} />
+                <Text style={{ alignSelf: 'center', marginTop: 6, fontSize: 15, fontWeight: 'bold' }}>Choose a Target</Text>
               </View>
             )}
           </View>
@@ -112,7 +125,8 @@ const GamePlayScreen = ({ navigation }) => {
             <EmojiFeedback />
             <TouchableOpacity
               style={styles.buttonNext}
-              onPress={() => setModalConfVisible(!modalConfVisible)}
+              //onPress={() => setModalConfVisible(!modalConfVisible)}
+              onPress={() => GoToFeedbackScreen(navigation, lastScore, lastTouchX, lastTouchY)}
             >
               <Text style={styles.textStyle}>Next</Text>
             </TouchableOpacity>
@@ -124,6 +138,10 @@ const GamePlayScreen = ({ navigation }) => {
   )
 
 };
+
+const GoToFeedbackScreen = (navigation, lastScore, lastTouchX, lastTouchY) => {
+  navigation.replace('Feedback', { lastScore, lastTouchX, lastTouchY })
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -193,6 +211,17 @@ const styles = StyleSheet.create({
   },
   doneIcon: {
     flex: 1,
+  },
+  textOnFrame: {
+    position: 'absolute',
+    top: '10%',
+    alignSelf: 'center',
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#10313c',
+    fontWeight: '700',
+    fontFamily: 'Avenir',
+    backgroundColor: 'rgba(235, 246, 250,0.8)'
   },
   ///////////// Modal styles
   centeredView: {

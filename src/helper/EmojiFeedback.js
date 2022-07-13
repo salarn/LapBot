@@ -2,13 +2,13 @@ import React from 'react';
 import { PixelRatio, StyleSheet, Text, View, PanResponder, Animated, TouchableOpacity } from 'react-native';
 
 const REACTIONS = [
-  { label: "Confused", src: require('../Assets/Emojis/confused.png'), bigSrc: require('../Assets/Emojis/confused_big.png') },
-  { label: "Doubtful", src: require('../Assets/Emojis/doubtful.png'), bigSrc: require('../Assets/Emojis/doubtful_big.png') },
-  { label: "So-So", src: require('../Assets/Emojis/so_so2.png'), bigSrc: require('../Assets/Emojis/so_so_big2.png') },
-  { label: "Likely", src: require('../Assets/Emojis/Likely.png'), bigSrc: require('../Assets/Emojis/Likely_big.png') },
-  { label: "Certain", src: require('../Assets/Emojis/certain.png'), bigSrc: require('../Assets/Emojis/certain_big.png') },
+  { label: "1", src: require('../Assets/Emojis/so_so2.png'), bigSrc: require('../Assets/Emojis/so_so_big2.png') },
+  { label: "2", src: require('../Assets/Emojis/doubtful.png'), bigSrc: require('../Assets/Emojis/doubtful_big.png') },
+  { label: "3", src: require('../Assets/Emojis/confused.png'), bigSrc: require('../Assets/Emojis/confused_big.png') },
+  { label: "4", src: require('../Assets/Emojis/Likely.png'), bigSrc: require('../Assets/Emojis/Likely_big.png') },
+  { label: "5", src: require('../Assets/Emojis/certain.png'), bigSrc: require('../Assets/Emojis/certain_big.png') },
 ];
-const WIDTH = 400;
+const WIDTH = 350;
 const DISTANCE = WIDTH / REACTIONS.length;
 const END = WIDTH - DISTANCE;
 
@@ -48,105 +48,110 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <View style={styles.wrap}>
           <Text style={styles.welcome}>
-            How confident are you with the chosen point?
+            How confident are you with your decesion?
           </Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Text style={styles.confidentTextLeft}>Not Confident</Text>
+            <View>
+              <View style={styles.line} />
 
-          <View style={styles.line} />
+              <View style={styles.reactions}>
+                {REACTIONS.map((reaction, idx) => {
+                  const u = idx * DISTANCE;
+                  let inputRange = [u - 20, u, u + 20];
+                  let scaleOutputRange = [1, 0.25, 1];
+                  let topOutputRange = [0, 10, 0];
+                  let colorOutputRange = ['#999', '#222', '#999'];
 
-          <View style={styles.reactions}>
-            {REACTIONS.map((reaction, idx) => {
-              const u = idx * DISTANCE;
-              let inputRange = [u - 20, u, u + 20];
-              let scaleOutputRange = [1, 0.25, 1];
-              let topOutputRange = [0, 10, 0];
-              let colorOutputRange = ['#999', '#222', '#999'];
+                  if (u - 20 < 0) {
+                    inputRange = [u, u + 20];
+                    scaleOutputRange = [0.25, 1];
+                    topOutputRange = [10, 0];
+                    colorOutputRange = ['#222', '#999'];
+                  }
 
-              if (u - 20 < 0) {
-                inputRange = [u, u + 20];
-                scaleOutputRange = [0.25, 1];
-                topOutputRange = [10, 0];
-                colorOutputRange = ['#222', '#999'];
-              }
-
-              if (u + 20 > END) {
-                inputRange = [u - 20, u];
-                scaleOutputRange = [1, 0.25];
-                topOutputRange = [0, 10];
-                colorOutputRange = ['#999', '#222'];
-              }
+                  if (u + 20 > END) {
+                    inputRange = [u - 20, u];
+                    scaleOutputRange = [1, 0.25];
+                    topOutputRange = [0, 10];
+                    colorOutputRange = ['#999', '#222'];
+                  }
 
 
-              return (
-                <TouchableOpacity onPress={() => this.updatePan(u)} activeOpacity={0.9} key={idx}>
-                  <View style={styles.smileyWrap}>
-                    <Animated.Image
-                      source={reaction.src}
-                      style={[styles.smiley, {
-                        transform: [{
-                          scale: this._pan.interpolate({
-                            inputRange,
-                            outputRange: scaleOutputRange,
-                            extrapolate: 'clamp',
-                          })
-                        }]
-                      }]}
-                    />
-                  </View>
+                  return (
+                    <TouchableOpacity onPress={() => this.updatePan(u)} activeOpacity={0.9} key={idx}>
+                      <View style={styles.smileyWrap}>
+                        <Animated.Image
+                          source={reaction.src}
+                          style={[styles.smiley, {
+                            transform: [{
+                              scale: this._pan.interpolate({
+                                inputRange,
+                                outputRange: scaleOutputRange,
+                                extrapolate: 'clamp',
+                              })
+                            }]
+                          }]}
+                        />
+                      </View>
 
-                  <Animated.Text style={[styles.reactionText, {
-                    top: this._pan.interpolate({
-                      inputRange,
-                      outputRange: topOutputRange,
-                      extrapolate: 'clamp',
-                    }),
-                    color: this._pan.interpolate({
-                      inputRange,
-                      outputRange: colorOutputRange,
+                      <Animated.Text style={[styles.reactionText, {
+                        top: this._pan.interpolate({
+                          inputRange,
+                          outputRange: topOutputRange,
+                          extrapolate: 'clamp',
+                        }),
+                        color: this._pan.interpolate({
+                          inputRange,
+                          outputRange: colorOutputRange,
+                          extrapolate: 'clamp',
+                        })
+                      }]}>
+                        {reaction.label}
+                      </Animated.Text>
+                    </TouchableOpacity>
+                  );
+                })}
+                <Animated.View {...this._panResponder.panHandlers} style={[styles.bigSmiley, {
+                  transform: [{
+                    translateX: this._pan.interpolate({
+                      inputRange: [0, END],
+                      outputRange: [0, END],
                       extrapolate: 'clamp',
                     })
-                  }]}>
-                    {reaction.label}
-                  </Animated.Text>
-                </TouchableOpacity>
-              );
-            })}
-            <Animated.View {...this._panResponder.panHandlers} style={[styles.bigSmiley, {
-              transform: [{
-                translateX: this._pan.interpolate({
-                  inputRange: [0, END],
-                  outputRange: [0, END],
-                  extrapolate: 'clamp',
-                })
-              }]
-            }]}>
-              {REACTIONS.map((reaction, idx) => {
-                let inputRange = [(idx - 1) * DISTANCE, idx * DISTANCE, (idx + 1) * DISTANCE];
-                let outputRange = [0, 1, 0];
+                  }]
+                }]}>
+                  {REACTIONS.map((reaction, idx) => {
+                    let inputRange = [(idx - 1) * DISTANCE, idx * DISTANCE, (idx + 1) * DISTANCE];
+                    let outputRange = [0, 1, 0];
 
-                if (idx == 0) {
-                  inputRange = [idx * DISTANCE, (idx + 1) * DISTANCE];
-                  outputRange = [1, 0];
-                }
+                    if (idx == 0) {
+                      inputRange = [idx * DISTANCE, (idx + 1) * DISTANCE];
+                      outputRange = [1, 0];
+                    }
 
-                if (idx == REACTIONS.length - 1) {
-                  inputRange = [(idx - 1) * DISTANCE, idx * DISTANCE];
-                  outputRange = [0, 1];
-                }
-                return (
-                  <Animated.Image
-                    key={idx}
-                    source={reaction.bigSrc}
-                    style={[styles.bigSmileyImage, {
-                      opacity: this._pan.interpolate({
-                        inputRange,
-                        outputRange,
-                        extrapolate: 'clamp',
-                      })
-                    }]}
-                  />
-                );
-              })}
-            </Animated.View>
+                    if (idx == REACTIONS.length - 1) {
+                      inputRange = [(idx - 1) * DISTANCE, idx * DISTANCE];
+                      outputRange = [0, 1];
+                    }
+                    return (
+                      <Animated.Image
+                        key={idx}
+                        source={reaction.bigSrc}
+                        style={[styles.bigSmileyImage, {
+                          opacity: this._pan.interpolate({
+                            inputRange,
+                            outputRange,
+                            extrapolate: 'clamp',
+                          })
+                        }]}
+                      />
+                    );
+                  })}
+                </Animated.View>
+              </View>
+            </View>
+            <Text style={styles.confidentTextRight}>Very Confident</Text>
           </View>
         </View>
       </View>
@@ -164,7 +169,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   wrap: {
-    width: WIDTH,
+    //width: WIDTH,
     //marginBottom: 50,
   },
   welcome: {
@@ -222,5 +227,23 @@ const styles = StyleSheet.create({
     width: WIDTH - (DISTANCE - size),
     left: (DISTANCE - size) / 2,
     top: DISTANCE / 2 + (2 / PixelRatio.get()),
-  }
+  },
+  confidentTextRight: {
+    fontSize: 15,
+    textAlign: 'center',
+    color: '#777',
+    alignSelf: 'center',
+    marginBottom: 15,
+    marginLeft: 5,
+    marginRight: -20,
+  },
+  confidentTextLeft: {
+    fontSize: 15,
+    textAlign: 'center',
+    color: '#777',
+    alignSelf: 'center',
+    marginBottom: 15,
+    marginRight: 5,
+    marginLeft: -20,
+  },
 });

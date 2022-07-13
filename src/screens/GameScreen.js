@@ -14,6 +14,7 @@ import { AuthContext } from '../Components/context';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Orientation from 'react-native-orientation';
 import GamePlayScreen from '../screens/GamePlayScreen';
+import FeedbackScreen from '../screens/FeedbackScreen'
 
 const GameStack = createNativeStackNavigator();
 
@@ -26,6 +27,9 @@ const GameScreen = ({ navigation }) => {
         options={{ header: () => null }} />
       <GameStack.Screen name='GamePlay'
         component={GamePlayScreen}
+        options={{ header: () => null }} />
+      <GameStack.Screen name='Feedback'
+        component={FeedbackScreen}
         options={{ header: () => null }} />
     </GameStack.Navigator>
   );

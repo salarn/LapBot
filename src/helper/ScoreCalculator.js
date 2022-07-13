@@ -66,7 +66,7 @@ const ScoreCalculator = async (x, y) => {
     }
   }
   if (numcounter == 0)
-    return 0.1;
+    return null;
   normalizeScore /= numcounter;
   return normalizeScore
 }
