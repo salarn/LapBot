@@ -20,12 +20,14 @@ import ScoreCalculator from '@/helper/ScoreCalculator';
 import EmojiFeedback from '@/helper/EmojiFeedback'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import FormButton from '@/Components/FormButton';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Value } from 'react-native-reanimated';
 
 const frameWidth = windowWidth * 0.8 * 1.25
 const frameHeight = windowWidth * 0.8
 
 const GamePlayScreen = ({ route, navigation }) => {
-  const { lastScore, lastTouchX, lastTouchY } = route.params
+  const { lastScore, lastTouchX, lastTouchY, levelNumber, roundNumber } = route.params
   const [quizVisible, setQuizVisible] = useState(true)
   const [modalConfVisible, setModalConfVisible] = useState(false);
 
@@ -38,8 +40,8 @@ const GamePlayScreen = ({ route, navigation }) => {
       <View style={styles.container}>
         <View style={styles.leftSideContainer}>
           <View style={styles.levelNumber}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dimgrey' }}>Level 1</Text>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dimgrey' }}>Round 1</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dimgrey' }}>Level   {levelNumber}</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dimgrey' }}>Round   {roundNumber}</Text>
           </View>
           <View style={styles.scoreContainer}>
 
@@ -66,7 +68,7 @@ const GamePlayScreen = ({ route, navigation }) => {
             */}
           </View>
           <View style={{ width: '40%', alignSelf: 'center', marginTop: 40 }}>
-            <FormButton buttonTitle='Next level' onPress={() => setModalConfVisible(true)} />
+            <FormButton buttonTitle='Next Round' onPress={() => GoToNextLevel(navigation)} />
           </View>
         </View>
       </View>
@@ -108,8 +110,18 @@ const GamePlayScreen = ({ route, navigation }) => {
 
 };
 
-const GoToFeedbackScreen = (navigation) => {
-  navigation.replace('Feedback')
+const GoToNextLevel = (navigation) => {
+  let levelNumber = 0
+  let roundNumber = 0
+  AsyncStorage.getItem('levelNumber').then((value) => {
+    levelNumber = value
+  }).then(() => {
+    AsyncStorage.getItem('roundNumber').then((value2) => {
+      roundNumber = value2
+    }).then(() => {
+      navigation.replace('GamePlay', { levelNumber, roundNumber })
+    })
+  })
 }
 
 const styles = StyleSheet.create({

@@ -19,16 +19,18 @@ import Images from '@/Theme/Images';
 import ScoreCalculator from '@/helper/ScoreCalculator';
 import EmojiFeedback from '@/helper/EmojiFeedback'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const frameWidth = windowWidth * 0.8 * 1.25
 const frameHeight = windowWidth * 0.8
 
-const GamePlayScreen = ({ navigation }) => {
+const GamePlayScreen = ({ navigation, route }) => {
   const [lastTouchX, setLastTouchX] = useState(null)
   const [lastTouchY, setLastTouchY] = useState(null)
   const [lastScore, setLastScore] = useState(null)
   const [quizVisible, setQuizVisible] = useState(true)
   const [modalConfVisible, setModalConfVisible] = useState(false);
+  const { levelNumber, roundNumber } = route.params
 
   useEffect(async () => {
     if (lastTouchX != null) {
@@ -46,8 +48,8 @@ const GamePlayScreen = ({ navigation }) => {
         <ExitButton navigation={navigation} backLocationString="MainTab" />
         <View>
           <View style={styles.levelNumber}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dimgrey' }}>Level 1</Text>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dimgrey' }}>Round 1</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dimgrey' }}>Level   {levelNumber}</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dimgrey' }}>Round   {roundNumber}</Text>
           </View>
           <View style={styles.examContainer}>
             {quizVisible ? (
@@ -126,7 +128,7 @@ const GamePlayScreen = ({ navigation }) => {
             <TouchableOpacity
               style={styles.buttonNext}
               //onPress={() => setModalConfVisible(!modalConfVisible)}
-              onPress={() => GoToFeedbackScreen(navigation, lastScore, lastTouchX, lastTouchY)}
+              onPress={() => GoToFeedbackScreen(navigation, lastScore, lastTouchX, lastTouchY, roundNumber, levelNumber)}
             >
               <Text style={styles.textStyle}>Next</Text>
             </TouchableOpacity>
@@ -139,8 +141,12 @@ const GamePlayScreen = ({ navigation }) => {
 
 };
 
-const GoToFeedbackScreen = (navigation, lastScore, lastTouchX, lastTouchY) => {
-  navigation.replace('Feedback', { lastScore, lastTouchX, lastTouchY })
+// FeedBack Screen & Go to next Round
+const GoToFeedbackScreen = (navigation, lastScore, lastTouchX, lastTouchY, roundNumber, levelNumber) => {
+  let nextRound = parseInt(roundNumber) + 1;
+  AsyncStorage.setItem('roundNumber', String(nextRound))
+
+  navigation.replace('Feedback', { lastScore, lastTouchX, lastTouchY, roundNumber, levelNumber })
 }
 
 const styles = StyleSheet.create({
