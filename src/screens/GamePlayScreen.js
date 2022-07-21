@@ -23,20 +23,35 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const frameWidth = windowWidth * 0.8 * 1.25
 const frameHeight = windowWidth * 0.8
+var userToken = null
+const roundPassLimit = 80
+const arr = [1, 2, 3, 4, 5]
 
 const GamePlayScreen = ({ navigation, route }) => {
   const [lastTouchX, setLastTouchX] = useState(null)
   const [lastTouchY, setLastTouchY] = useState(null)
   const [lastScore, setLastScore] = useState(null)
   const [quizVisible, setQuizVisible] = useState(true)
-  const [modalConfVisible, setModalConfVisible] = useState(false);
+  const [modalConfVisible, setModalConfVisible] = useState(false)
+  const [confidentLevel, setConfidentLevel] = useState(null)
+  const [bingoNumber, setBingoNumber] = useState(null)
   const { levelNumber, roundNumber } = route.params
+
+  handleConfidentLevel = number => setConfidentLevel(number + 1)
 
   useEffect(async () => {
     if (lastTouchX != null) {
       let currentScore = await ScoreCalculator(lastTouchX / frameWidth, lastTouchY / frameHeight)
       setLastScore(currentScore)
     }
+
+    AsyncStorage.getItem('userToken').then((value) => {
+      userToken = value
+    })
+
+    AsyncStorage.getItem('bingoNumber').then((value) => {
+      setBingoNumber(parseInt(value))
+    })
   })
   return (
     <ImageBackground
@@ -92,14 +107,16 @@ const GamePlayScreen = ({ navigation, route }) => {
           </View>
         </View>
         <View style={styles.IconsContainer}>
-          <View style={styles.doneIcon}>
-            <Icon reverse color="#0ca284" name="check" type="font-awesome" size={50}
-              disabled={!quizVisible || lastScore == null}
-              //onPress={() => { Alert.alert("Score: " + String(parseInt(lastScore)) + "%") }}
-              onPress={() => setModalConfVisible(true)}
-            />
-            <Text style={{ alignSelf: 'center', marginTop: 6, fontSize: 15, fontWeight: 'bold' }}>Confirm</Text>
+          <View style={styles.gallbladdersContainer}>
+            {arr.map(i => {
+              return <Image key={i} source={i > bingoNumber ?
+                require('../Assets/Images/gallbladder-black.png') :
+                require('../Assets/Images/gallbladder-colorful.png')}
+                style={{ height: 40, width: 40 }} />
+            })
+            }
           </View>
+
           <View style={styles.repeatIcon}>
             {quizVisible ? (
               <View>
@@ -113,6 +130,14 @@ const GamePlayScreen = ({ navigation, route }) => {
               </View>
             )}
           </View>
+          <View style={styles.doneIcon}>
+            <Icon reverse color="#0ca284" name="check" type="font-awesome" size={50}
+              disabled={!quizVisible || lastScore == null}
+              //onPress={() => { Alert.alert("Score: " + String(parseInt(lastScore)) + "%") }}
+              onPress={() => setModalConfVisible(true)}
+            />
+            <Text style={{ alignSelf: 'center', marginTop: 6, fontSize: 15, fontWeight: 'bold' }}>Confirm</Text>
+          </View>
         </View>
       </View>
       <Modal
@@ -124,11 +149,11 @@ const GamePlayScreen = ({ navigation, route }) => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <BackButton onPress={() => setModalConfVisible(!modalConfVisible)} />
-            <EmojiFeedback />
+            <EmojiFeedback onSetConfidentLevel={this.handleConfidentLevel} />
             <TouchableOpacity
               style={styles.buttonNext}
               //onPress={() => setModalConfVisible(!modalConfVisible)}
-              onPress={() => GoToFeedbackScreen(navigation, lastScore, lastTouchX, lastTouchY, roundNumber, levelNumber)}
+              onPress={() => GoToFeedbackScreen(navigation, lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber)}
             >
               <Text style={styles.textStyle}>Next</Text>
             </TouchableOpacity>
@@ -142,11 +167,54 @@ const GamePlayScreen = ({ navigation, route }) => {
 };
 
 // FeedBack Screen & Go to next Round
-const GoToFeedbackScreen = (navigation, lastScore, lastTouchX, lastTouchY, roundNumber, levelNumber) => {
+const GoToFeedbackScreen = (navigation, lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber) => {
+  // next round
   let nextRound = parseInt(roundNumber) + 1;
   AsyncStorage.setItem('roundNumber', String(nextRound))
 
-  navigation.replace('Feedback', { lastScore, lastTouchX, lastTouchY, roundNumber, levelNumber })
+  // bingo plus
+  if (lastScore >= roundPassLimit) {
+    let nextBingo = bingoNumber + 1;
+    AsyncStorage.setItem('bingoNumber', String(nextBingo))
+  }
+  else {
+    AsyncStorage.setItem('bingoNumber', "0")
+  }
+
+  // Send the record to server
+  sendRecordToServer(lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber)
+
+  navigation.replace('Feedback', { lastScore, lastTouchX, lastTouchY, levelNumber, roundNumber })
+}
+const sendRecordToServer = (lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber) => {
+  var formdata = new FormData();
+  var responseStatus = 0
+  formdata.append("nickname", userToken)
+  formdata.append("lastScore", lastScore)
+  formdata.append("lastTouchX", lastTouchX / frameWidth)
+  formdata.append("lastTouchY", lastTouchY / frameHeight)
+  formdata.append("confidentLevel", confidentLevel)
+  formdata.append("levelNumber", levelNumber)
+  formdata.append("roundNumber", roundNumber)
+  const requestOptions = {
+    method: 'POST',
+    body: formdata,
+    redirect: 'follow'
+  };
+  fetch('https://users.encs.concordia.ca/~m_orooz/new-record.php', requestOptions)
+    .then(response => {
+      responseStatus = response.status
+      console.log("The record sent: ")
+      console.log(responseStatus)
+    })
+    .catch(error => {
+      console.error('record sending to server ERROR. Http server request Error: ', error.toString());
+    });
+}
+const gallbladderBingoRender = () => {
+  return (
+    <View></View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -228,6 +296,18 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontFamily: 'Avenir',
     backgroundColor: 'rgba(235, 246, 250,0.8)'
+  },
+  gallbladdersContainer: {
+    flexDirection: 'row',
+    borderLeftColor: '#fcf05a',
+    borderBottomColor: '#fcf05a',
+    borderTopColor: '#56b56a',
+    borderRightColor: '#56b56a',
+    borderWidth: 3,
+    borderRadius: 10,
+    padding: 5,
+    marginTop: -20,
+    marginBottom: 10
   },
   ///////////// Modal styles
   centeredView: {

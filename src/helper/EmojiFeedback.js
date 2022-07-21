@@ -41,6 +41,7 @@ export default class App extends React.Component {
 
   updatePan(toValue) {
     Animated.spring(this._pan, { toValue, friction: 7, useNativeDriver: false }).start();
+    this.props.onSetConfidentLevel(toValue / DISTANCE)
   }
 
   render() {

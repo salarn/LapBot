@@ -1,12 +1,12 @@
-import React from 'react'
-import { TouchableOpacity, Image, StyleSheet } from 'react-native'
+import React, { useEffect } from 'react'
+import { TouchableOpacity, Image, StyleSheet, ImageBackground } from 'react-native'
 import { Text } from 'react-native-paper'
 import { getStatusBarHeight } from 'react-native-status-bar-height'
 
-export default function ExitButton(props) {
+const ExitButton = (props) => {
   return (
     <TouchableOpacity onPress={() => {
-      props.navigation.replace(props.backLocationString)
+      props.navigation.replace('RotatePhoneToPortrait')
     }} style={styles.container}>
       <Image
         style={styles.image}
@@ -33,5 +33,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: 'center',
     top: 6,
-  }
+  },
 })
+export default ExitButton;
