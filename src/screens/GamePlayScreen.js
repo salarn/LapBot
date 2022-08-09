@@ -33,11 +33,25 @@ const GamePlayScreen = ({ navigation, route }) => {
   const [lastScore, setLastScore] = useState(null)
   const [quizVisible, setQuizVisible] = useState(true)
   const [modalConfVisible, setModalConfVisible] = useState(false)
-  const [confidentLevel, setConfidentLevel] = useState(null)
+  const [confidentLevel, setConfidentLevel] = useState(3)
   const [bingoNumber, setBingoNumber] = useState(null)
+  const [timerCount, setTimerCount] = useState(0)
+  const [timerStarted, setTimerStarted] = useState(false)
   const { levelNumber, roundNumber } = route.params
 
   handleConfidentLevel = number => setConfidentLevel(number + 1)
+
+  useEffect(() => {
+    //Timer count up
+    let interval = setInterval(() => {
+      setTimerCount(timerCount + 1)
+    }, 1000)
+
+    if (modalConfVisible == true)
+      clearInterval(interval)
+
+    return () => clearInterval(interval)
+  }, [timerCount, modalConfVisible])
 
   useEffect(async () => {
     if (lastTouchX != null) {
@@ -153,7 +167,7 @@ const GamePlayScreen = ({ navigation, route }) => {
             <TouchableOpacity
               style={styles.buttonNext}
               //onPress={() => setModalConfVisible(!modalConfVisible)}
-              onPress={() => GoToFeedbackScreen(navigation, lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber)}
+              onPress={() => GoToFeedbackScreen(navigation, lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber, timerCount)}
             >
               <Text style={styles.textStyle}>Next</Text>
             </TouchableOpacity>
@@ -167,26 +181,26 @@ const GamePlayScreen = ({ navigation, route }) => {
 };
 
 // FeedBack Screen & Go to next Round
-const GoToFeedbackScreen = (navigation, lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber) => {
+const GoToFeedbackScreen = (navigation, lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber, timerCount) => {
   // next round
   let nextRound = parseInt(roundNumber) + 1;
   AsyncStorage.setItem('roundNumber', String(nextRound))
 
   // bingo plus
   if (lastScore >= roundPassLimit) {
-    let nextBingo = bingoNumber + 1;
-    AsyncStorage.setItem('bingoNumber', String(nextBingo))
+    bingoNumber += 1;
+    AsyncStorage.setItem('bingoNumber', String(bingoNumber))
   }
   else {
     AsyncStorage.setItem('bingoNumber', "0")
   }
 
   // Send the record to server
-  sendRecordToServer(lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber)
+  sendRecordToServer(lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber, timerCount)
 
   navigation.replace('Feedback', { lastScore, lastTouchX, lastTouchY, levelNumber, roundNumber })
 }
-const sendRecordToServer = (lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber) => {
+const sendRecordToServer = (lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber, timerCount) => {
   var formdata = new FormData();
   var responseStatus = 0
   formdata.append("nickname", userToken)
@@ -196,6 +210,8 @@ const sendRecordToServer = (lastScore, lastTouchX, lastTouchY, confidentLevel, l
   formdata.append("confidentLevel", confidentLevel)
   formdata.append("levelNumber", levelNumber)
   formdata.append("roundNumber", roundNumber)
+  formdata.append("bingoNumber", bingoNumber)
+  formdata.append("timerCount", timerCount)
   const requestOptions = {
     method: 'POST',
     body: formdata,
@@ -204,17 +220,10 @@ const sendRecordToServer = (lastScore, lastTouchX, lastTouchY, confidentLevel, l
   fetch('https://users.encs.concordia.ca/~m_orooz/new-record.php', requestOptions)
     .then(response => {
       responseStatus = response.status
-      console.log("The record sent: ")
-      console.log(responseStatus)
     })
     .catch(error => {
       console.error('record sending to server ERROR. Http server request Error: ', error.toString());
     });
-}
-const gallbladderBingoRender = () => {
-  return (
-    <View></View>
-  )
 }
 
 const styles = StyleSheet.create({
