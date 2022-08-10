@@ -120,11 +120,19 @@ const consentDetailButton = (navigation, onboardingRef) => {
                     {'\u2022'} If you wish to have any data connected to you deleted prior to January 2023,
                     please visit the player profile page or email us.
                 </Text>
+                <TouchableOpacity style={styles.acceptButtonContainer} onPress={() => {
+                    AsyncStorage.setItem('alreadyLaunchedOnboarding', 'true');
+                    navigation.navigate("Login")
+                }}>
+                    <Text style={styles.acceptButtonText}>Accept</Text>
+                </TouchableOpacity>
+                {/*
                 <FormButton buttonTitle="Accept"
                     onPress={() => {
                         AsyncStorage.setItem('alreadyLaunchedOnboarding', 'true');
                         navigation.navigate("Login")
                     }} />
+                */}
                 <TouchableOpacity style={styles.refuseButtonContainer} onPress={() => onboardingRef.current.goToPage(0, true)}>
                     <Text style={styles.refuseButtonText}>Refuse</Text>
                 </TouchableOpacity>
@@ -169,7 +177,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         width: '100%',
         height: windowHeight / 15,
-        backgroundColor: '#b82323',
+        backgroundColor: '#fa4b2a',
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
@@ -178,7 +186,22 @@ const styles = StyleSheet.create({
     refuseButtonText: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#ffffff',
+        color: '#fffdf7',
     },
+    acceptButtonContainer: {
+        marginTop: 10,
+        width: '100%',
+        height: windowHeight / 15,
+        backgroundColor: '#33B957',
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 3,
+    },
+    acceptButtonText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#fffdf7',
+    }
 })
 

@@ -46,7 +46,7 @@ const NextLevelScreen = ({ route, navigation }) => {
     >
       <View style={styles.container}>
         <View style={styles.leftContainer}>
-          <Text style={styles.congratsText}>Congrats on passing level {levelNumber}{'\n'}Your score was {currentUserScore ? currentUserScore.toFixed(2) : "--"}</Text>
+          <Text style={styles.congratsText}>Congrats on passing level {levelNumber}{'\n'}Your score was {currentUserScore ? currentUserScore.toFixed(0) : "--"}</Text>
           <Image source={require('../Assets/Images/trophy-onboarding.gif')}
             style={styles.congratsGif} />
         </View>

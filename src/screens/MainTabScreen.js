@@ -1,13 +1,16 @@
 import React from 'react';
 
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
+import { createStackNavigator } from '@react-navigation/stack'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import Icon from 'react-native-vector-icons/Ionicons'
+import Icon2 from 'react-native-vector-icons/MaterialIcons'
+import Icon3 from 'react-native-vector-icons/Entypo'
 
 import LevelsScreen from './LevelsScreen'
+import TutorialScreen from './TutorialScreen'
+import LeaderboardScreen from './LeaderboardScreen';
 
 const HomeStack = createNativeStackNavigator();
 const DetailsStack = createStackNavigator();
@@ -17,55 +20,44 @@ const Tab = createMaterialBottomTabNavigator();
 const MainTabScreen = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Game"
       activeColor="#fff"
+      shifting={true}
     >
       <Tab.Screen
-        name="Home"
-        component={HomeStackScreen}
+        name="Tutorial"
+        component={TutorialScreen}
         options={{
-          tabBarLabel: 'Home',
-          tabBarColor: '#009387',
+          tabBarLabel: 'Tutorial',
+          tabBarColor: '#ff944d',
           tabBarIcon: ({ color }) => (
-            <Icon name="ios-home" color={color} size={26} />
+            <Icon3 name="book" color={color} size={26} />
           ),
         }}
       />
       <Tab.Screen
-        name="Notifications"
-        component={DetailsStackScreen}
-        options={{
-          tabBarLabel: 'Updates',
-          tabBarColor: '#1f65ff',
-          tabBarIcon: ({ color }) => (
-            <Icon name="ios-notifications" color={color} size={26} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
+        name="Game"
         component={LevelsScreen}
         options={{
-          tabBarLabel: 'Profile',
-          tabBarColor: '#694fad',
+          tabBarLabel: 'Game',
+          tabBarColor: '#36a4c9',
           tabBarIcon: ({ color }) => (
-            <Icon name="ios-person" color={color} size={26} />
+            <Icon name="game-controller" color={color} size={26} />
           ),
         }}
       />
       <Tab.Screen
-        name="Explore"
-        component={LevelsScreen}
+        name="Leaderboard"
+        component={LeaderboardScreen}
         options={{
-          tabBarLabel: 'Explore',
-          tabBarColor: '#d02860',
+          tabBarLabel: 'Leaderboard',
+          tabBarColor: '#f4666a',
           tabBarIcon: ({ color }) => (
-            <Icon name="ios-aperture" color={color} size={26} />
+            <Icon2 name="leaderboard" color={color} size={26} />
           ),
         }}
       />
     </Tab.Navigator>
-
   )
 }
 
