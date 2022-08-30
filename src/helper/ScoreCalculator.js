@@ -6,9 +6,11 @@ import {
 } from 'react-native';
 import GetPixelColor from 'react-native-get-pixel-color';
 import { windowHeight, windowWidth } from '../utils/Dimentions';
+import GameData from '../helper/GameData'
+import RoundsCalculationMod from '../helper/RoundsCalculationMod'
 
-const frameOrgwidth = 1100.0
-const frameOrgHeight = 880.0
+let frameOrgwidth = 1
+let frameOrgHeight = 1
 
 const bullseyeRadius = (1.0 / 8.0) / 3.0 * frameOrgHeight
 
@@ -32,9 +34,12 @@ const pixelScoreCalculator = (color) => {
   return score
 }
 
-const ScoreCalculator = async (x, y) => {
+const ScoreCalculator = async (x, y, levelNumber, roundNumber, orgFrameWidth, orgFrameHeight) => {
 
-  await GetPixelColor.setImage('/Users/salar/Desktop/MyApp/src/Assets/GameData/1.0_image_scaled_raw_pixel.png')
+  frameOrgwidth = orgFrameWidth
+  frameOrgHeight = orgFrameHeight
+
+  await GetPixelColor.setImage(Image.resolveAssetSource(GameData.scoreFrame[levelNumber][RoundsCalculationMod(levelNumber, roundNumber)]).uri)
     .catch(err => {
       // Handle errors
       console.log("Error to load the image")

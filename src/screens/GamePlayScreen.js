@@ -20,11 +20,23 @@ import ScoreCalculator from '@/helper/ScoreCalculator';
 import EmojiFeedback from '@/helper/EmojiFeedback'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import GameData from '../helper/GameData'
+import RoundsCalculationMod from '../helper/RoundsCalculationMod'
 
-const frameWidth = windowWidth * 0.8 * 1.25
-const frameHeight = windowWidth * 0.8
+
+let OriginalFrameWidth = 1
+let OriginalFrameHeight = 1
+let OriginalFrameWidthOnHeightRatio = 1.0
+
+let OverFrameWidth = windowWidth * 0.85 * 1.5
+let OverFrameHeight = windowWidth * 0.85
+let OverFrameWidthOnHeightRatio = OverFrameWidth / OverFrameHeight
+
+let GameFrameWidth = 1
+let GameFrameHeight = 1
+
 var userToken = null
-const roundPassLimit = 80
+const roundPassLimit = 50
 const arr = [1, 2, 3, 4, 5]
 
 const GamePlayScreen = ({ navigation, route }) => {
@@ -38,6 +50,21 @@ const GamePlayScreen = ({ navigation, route }) => {
   const [timerCount, setTimerCount] = useState(0)
   const [timerStarted, setTimerStarted] = useState(false)
   const { levelNumber, roundNumber } = route.params
+
+
+  let temp = Image.resolveAssetSource(GameData.heatmapFrame[levelNumber][RoundsCalculationMod(levelNumber, roundNumber)])
+  OriginalFrameWidth = temp.width
+  OriginalFrameHeight = temp.height
+  OriginalFrameWidthOnHeightRatio = temp.width / temp.height
+
+  if (OriginalFrameWidthOnHeightRatio >= OverFrameWidthOnHeightRatio) {
+    GameFrameWidth = OverFrameWidth
+    GameFrameHeight = OverFrameWidth / OriginalFrameWidthOnHeightRatio
+  }
+  else {
+    GameFrameWidth = OverFrameHeight * OriginalFrameWidthOnHeightRatio
+    GameFrameHeight = OverFrameHeight
+  }
 
   handleConfidentLevel = number => setConfidentLevel(number + 1)
 
@@ -55,10 +82,13 @@ const GamePlayScreen = ({ navigation, route }) => {
 
   useEffect(async () => {
     if (lastTouchX != null) {
-      let currentScore = await ScoreCalculator(lastTouchX / frameWidth, lastTouchY / frameHeight)
+      let currentScore = await ScoreCalculator(lastTouchX / GameFrameWidth, lastTouchY / GameFrameHeight, levelNumber, roundNumber, OriginalFrameWidth, OriginalFrameHeight)
+      console.log("##" + currentScore)
       setLastScore(currentScore)
     }
+  }, [lastTouchX])
 
+  useEffect(() => {
     AsyncStorage.getItem('userToken').then((value) => {
       userToken = value
     })
@@ -66,7 +96,7 @@ const GamePlayScreen = ({ navigation, route }) => {
     AsyncStorage.getItem('bingoNumber').then((value) => {
       setBingoNumber(parseInt(value))
     })
-  })
+  }, [])
   return (
     <ImageBackground
       source={require('../Assets/Images/background-gameplay.png')}
@@ -80,7 +110,7 @@ const GamePlayScreen = ({ navigation, route }) => {
             <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dimgrey' }}>Level   {levelNumber}</Text>
             <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dimgrey' }}>Round   {roundNumber}</Text>
           </View>
-          <View style={styles.examContainer}>
+          <View style={[styles.examContainer, { alignItems: 'center', justifyContent: 'center' }]}>
             {quizVisible ? (
               <View>
                 <View onTouchStart={(e) => {
@@ -88,8 +118,8 @@ const GamePlayScreen = ({ navigation, route }) => {
                   setLastTouchY(e.nativeEvent.locationY)
                 }}
                 >
-                  <Image source={require('../Assets/GameData/1.0-image-clean.jpg')}
-                    style={styles.frame} />
+                  <Image source={GameData.rawFrame[levelNumber][RoundsCalculationMod(levelNumber, roundNumber)]}
+                    style={{ height: GameFrameHeight, width: GameFrameWidth, }} />
                 </View>
                 {lastScore == null &&
                   <Text style={styles.textOnFrame}>Choose a target point by clicking on this image</Text>
@@ -97,20 +127,20 @@ const GamePlayScreen = ({ navigation, route }) => {
                 <Image source={require('../Assets/Images/crosshair.png')}
                   style={[styles.crosshair,
                   {
-                    top: lastTouchY == null ? 200 - windowWidth * 0.1 / 2 : lastTouchY - windowWidth * 0.1 / 2,
-                    left: lastTouchX == null ? 250 - windowWidth * 0.1 / 2 : lastTouchX - windowWidth * 0.1 / 2
+                    top: lastTouchY == null ? 220 - windowWidth * 0.1 / 2 : lastTouchY - windowWidth * 0.1 / 2,
+                    left: lastTouchX == null ? 300 - windowWidth * 0.1 / 2 : lastTouchX - windowWidth * 0.1 / 2
                   }]} />
                 <Image source={require('../Assets/Images/scalpel.png')}
                   style={[styles.scalpel, {
-                    top: lastTouchY == null ? 200 + windowWidth * 0.1 / 3 : lastTouchY + windowWidth * 0.1 / 3,
-                    left: lastTouchX == null ? 250 + windowWidth * 0.1 / 3 : lastTouchX + windowWidth * 0.1 / 3
+                    top: lastTouchY == null ? 220 + windowWidth * 0.1 / 3 : lastTouchY + windowWidth * 0.1 / 3,
+                    left: lastTouchX == null ? 300 + windowWidth * 0.1 / 3 : lastTouchX + windowWidth * 0.1 / 3
                   }]} />
 
               </View>
             ) : (
               <View>
-                <Video source={require('../Assets/Videos/1.0-video-clean.mp4')}
-                  style={styles.video}
+                <Video source={GameData.rawVideo[levelNumber][RoundsCalculationMod(levelNumber, roundNumber)]}
+                  style={{ height: GameFrameHeight, width: GameFrameWidth, }}
                   controls={true}
                   muted={true}
                   fullscreenAutorotate={false}
@@ -198,15 +228,15 @@ const GoToFeedbackScreen = (navigation, lastScore, lastTouchX, lastTouchY, confi
   // Send the record to server
   sendRecordToServer(lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber, timerCount)
 
-  navigation.replace('Feedback', { lastScore, lastTouchX, lastTouchY, levelNumber, roundNumber })
+  navigation.replace('Feedback', { lastScore, lastTouchX, lastTouchY, levelNumber, roundNumber, GameFrameWidth, GameFrameHeight })
 }
 const sendRecordToServer = (lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber, timerCount) => {
   var formdata = new FormData();
   var responseStatus = 0
   formdata.append("nickname", userToken)
   formdata.append("lastScore", lastScore)
-  formdata.append("lastTouchX", lastTouchX / frameWidth)
-  formdata.append("lastTouchY", lastTouchY / frameHeight)
+  formdata.append("lastTouchX", lastTouchX / GameFrameWidth)
+  formdata.append("lastTouchY", lastTouchY / GameFrameHeight)
   formdata.append("confidentLevel", confidentLevel)
   formdata.append("levelNumber", levelNumber)
   formdata.append("roundNumber", roundNumber)
@@ -251,22 +281,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   examContainer: {
-    height: frameHeight,
-    width: frameWidth,
+    height: OverFrameHeight,
+    width: OverFrameWidth,
   },
   levelNumber: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     top: -10,
-  },
-  video: {
-    width: "100%",
-    height: "100%",
-  },
-  frame: {
-    height: '100%',
-    width: '100%',
-    resizeMode: 'stretch',
   },
   crosshair: {
     tintColor: 'white',
@@ -287,7 +308,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 40,
-    marginRight: -60,
+    marginRight: -30,
   },
   repeatIcon: {
     flex: 1,

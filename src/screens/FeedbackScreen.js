@@ -22,16 +22,17 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import FormButton from '@/Components/FormButton';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Value } from 'react-native-reanimated';
+import GameData from '../helper/GameData'
+import RoundsCalculationMod from '@/helper/RoundsCalculationMod';
 
-const frameWidth = windowWidth * 0.8 * 1.25
-const frameHeight = windowWidth * 0.8
-const roundPassLimit = 80
+const roundPassLimit = 50
 const arr = [1, 2, 3, 4, 5]
 
 const GamePlayScreen = ({ route, navigation }) => {
-  const { lastScore, lastTouchX, lastTouchY, levelNumber, roundNumber } = route.params
+  const { lastScore, lastTouchX, lastTouchY, levelNumber, roundNumber, GameFrameWidth, GameFrameHeight } = route.params
   const [quizVisible, setQuizVisible] = useState(true)
-  const [modalConfVisible, setModalConfVisible] = useState(false)
+  const [modalImageVisible, setModalImageVisible] = useState(false)
+  const [modalVideoVisible, setModalVideoVisible] = useState(false)
   const [bingoNumber, setBingoNumber] = useState(null)
 
   useEffect(() => {
@@ -85,35 +86,42 @@ const GamePlayScreen = ({ route, navigation }) => {
             }
           </View>
           <View style={styles.IconsContainer}>
-            <View style={styles.frameIcon}>
-              <Icon reverse color="#972ba1" name="photo" type="font-awesome" size={50}
-                onPress={() => setModalConfVisible(true)}
-              />
-              <Text style={{ alignSelf: 'center', marginTop: 6, fontSize: 15, fontWeight: 'bold' }}>Anotated Frame</Text>
+            <Text style={{ alignSelf: 'center', marginTop: 6, fontSize: 19, fontWeight: 'bold' }}>Feedback</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', }}>
+              <View style={styles.frameIcon}>
+                <Icon reverse color="#ff6600" name="photo" type="font-awesome" size={50}
+                  onPress={() => setModalImageVisible(true)}
+                />
+                <Text style={{ alignSelf: 'center', marginTop: 6, fontSize: 15, fontWeight: 'bold' }}>Image</Text>
+              </View>
+              <View style={styles.frameIcon}>
+                <Icon reverse color="#ff6600" name="video" type="entypo" size={50}
+                  onPress={() => setModalVideoVisible(true)}
+                />
+                <Text style={{ alignSelf: 'center', marginTop: 6, fontSize: 15, fontWeight: 'bold' }}>Video</Text>
+              </View>
             </View>
           </View>
-          <View style={{ alignSelf: 'center', marginTop: 40 }}>
+          <View style={{ alignSelf: 'center', marginTop: 10 }}>
             <FormButton buttonTitle='Next Round' onPress={() => GoToNextRound(navigation, bingoNumber, levelNumber)} />
           </View>
         </View>
       </View>
-      <ExitButton navigation={navigation} backLocationString="MainTab" />
       <Modal
         supportedOrientations={['landscape-right']}
         animationType='slide'
         transparent={true}
-        visible={modalConfVisible}
+        visible={modalImageVisible}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <BackButton onPress={() => setModalConfVisible(!modalConfVisible)} />
-            {/*<Text>Heat Map</Text>*/}
+            <BackButton onPress={() => setModalImageVisible(!modalImageVisible)} />
             <View style={{
-              height: frameHeight,
-              width: frameWidth,
+              height: GameFrameHeight,
+              width: GameFrameWidth,
             }}>
-              <Image source={require('../Assets/GameData/1.0_image_scaled_raw_heatmap.png')}
-                style={styles.frame} />
+              <Image source={GameData.heatmapFrame[levelNumber][RoundsCalculationMod(levelNumber, roundNumber)]}
+                style={{ height: GameFrameHeight, width: GameFrameWidth, }} />
               <Image source={require('../Assets/Images/crosshair.png')}
                 style={[styles.crosshair,
                 {
@@ -125,6 +133,29 @@ const GamePlayScreen = ({ route, navigation }) => {
                   top: lastTouchY + windowWidth * 0.1 / 3,
                   left: lastTouchX + windowWidth * 0.1 / 3
                 }]} />
+            </View>
+          </View>
+        </View>
+
+      </Modal>
+      <Modal
+        supportedOrientations={['landscape-right']}
+        animationType='slide'
+        transparent={true}
+        visible={modalVideoVisible}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <BackButton onPress={() => setModalVideoVisible(!modalVideoVisible)} />
+
+            <View>
+              <Video source={GameData.heatmapVideo[levelNumber][RoundsCalculationMod(levelNumber, roundNumber)]}
+                style={{ height: GameFrameHeight, width: GameFrameWidth, }}
+                controls={true}
+                muted={true}
+                fullscreenAutorotate={false}
+                repeat={true}
+              />
             </View>
           </View>
         </View>
@@ -176,15 +207,10 @@ const styles = StyleSheet.create({
     //alignItems: "center",
   },
   IconsContainer: {
-    //height: '50%',
-    //width: '50%',
-    //alignItems: "center",
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    //alignItems: 'center',
-    //justifyContent: 'center',
-    //marginTop: 40,
-    //marginRight: -60,
+    borderWidth: 2,
+    borderColor: 'dimgrey',
+    borderRadius: 10,
+    paddingBottom: 20,
   },
   scoreText: {
     position: 'absolute',
@@ -231,17 +257,12 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  frame: {
-    height: '100%',
-    width: '100%',
-    resizeMode: 'stretch',
-  },
   scoreGif: {
     height: 300,
     width: 300,
     //resizeMode: 'cover',
     //position: 'absolute',
-    marginTop: 60,
+    marginTop: '30%',
     alignSelf: 'center',
   },
   animationGif: {
@@ -280,8 +301,8 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 10,
     padding: 5,
-    marginTop: -20,
-    marginBottom: 10,
+    marginTop: 0,
+    marginBottom: 20,
     justifyContent: "center",
   },
   ///////////// Modal styles

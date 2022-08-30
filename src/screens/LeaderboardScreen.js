@@ -23,6 +23,7 @@ const LeaderboardScreen = ({ navigation }) => {
   const [rankList, setRankList] = useState(null)
   const [currentUserScore, setCurrentUserScore] = useState(null)
   const [currentUserRank, setCurrentUserRank] = useState(null)
+  const [currentUserLevelNumber, setCurrentUserLevelNumber] = useState(null)
 
   const [modalConfVisible, setModalConfVisible] = useState(false)
   const [modalLevelNumber, setModalLevelNumber] = useState(1)
@@ -35,6 +36,15 @@ const LeaderboardScreen = ({ navigation }) => {
       setRankList(null)
       loadGeneralLeaderboardData(setRankList, setCurrentUserScore, setCurrentUserRank)
     });
+
+    AsyncStorage.getItem('levelNumber').then((value) => {
+      if (value == null) {
+        setCurrentUserLevelNumber(1)
+      } else {
+        setCurrentUserLevelNumber(parseInt(value))
+      }
+    })
+
     return unsubscribe;
   }, [navigation])
   useEffect(() => {
@@ -91,14 +101,14 @@ const LeaderboardScreen = ({ navigation }) => {
         <Image source={require('../Assets/Images/leaderboardPodiumGeneral.png')}
           style={styles.leaderBoardPNG} />
         <Image source={require('../Assets/Images/leaderboardText2.png')}
-          style={{ width: 300, height: 35, marginBottom: 15 }} />
+          style={{ width: 300, height: 47, marginBottom: 15 }} />
         <View style={{ flexDirection: 'row', width: '80%' }}>
           <Text style={{ position: 'absolute', left: '3%' }}>Rank</Text>
           <Text style={{ position: 'absolute', left: '27%' }}>Name</Text>
           <Text style={{ position: 'absolute', left: '62%' }}>Level</Text>
           <Text style={{ position: 'absolute', left: '82%' }}>Score</Text>
         </View>
-        <View style={{ borderWidth: 1, height: '40%', width: '80%', borderRadius: 15, paddingTop: 10, marginTop: 20 }}>
+        <View style={{ borderWidth: 1, height: '40%', width: '80%', borderRadius: 16, paddingTop: 10, marginTop: 20 }}>
           <ScrollView style={{ flex: 1 }}>
             {firstThreeUsers.map((oneUser, index) =>
               <View style={{ flexDirection: 'row', height: 35 }}>
@@ -115,7 +125,7 @@ const LeaderboardScreen = ({ navigation }) => {
                   <Text>{oneUser[2]}</Text>
                 </View>
                 <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
-                  <Text style={{ color: "#32815c" }}>{oneUser[1].toFixed(0)} xp</Text>
+                  <Text style={{ fontWeight: 'bold', color: "#32815c" }}>{oneUser[1].toFixed(0)} xp</Text>
                 </View>
               </View>
             )}
@@ -134,30 +144,30 @@ const LeaderboardScreen = ({ navigation }) => {
                   <Text>{oneUser[2]}</Text>
                 </View>
                 <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
-                  <Text style={{ color: "#32815c" }}>{oneUser[1].toFixed(0)} xp</Text>
+                  <Text style={{ fontWeight: 'bold', color: "#32815c" }}>{oneUser[1].toFixed(0)} xp</Text>
                 </View>
               </View>
             )}
           </ScrollView>
-          <View style={{ height: 50 }}>
-            <View style={{ borderWidth: 1, flexDirection: 'row', flex: 1, borderRadius: 15, backgroundColor: "rgba(253, 236, 59,0.5)" }}>
-              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
-                <Text style={{ fontSize: 15 }}>{currentUserRank}.</Text>
-              </View>
-              <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Icon color="#3fb3e6" name="user-md" type="font-awesome" size={25} />
-              </View>
-              <View style={{ flex: 4, alignItems: 'flex-start', justifyContent: 'center' }}>
-                <Text style={{ marginLeft: 10, paddingRight: 10 }}>{userToken} (You)</Text>
-              </View>
-              <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }}>
-                <Text style={{}}>4</Text>
-              </View>
-              <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ color: "#32815c" }}>{currentUserScore.toFixed(0)} xp</Text>
-              </View>
+
+          <View style={{ borderWidth: 1, flexDirection: 'row', height: 50, borderRadius: 15, backgroundColor: "rgba(253, 236, 59,0.5)" }}>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
+              <Text style={{ fontSize: 15 }}>{currentUserRank != null ? currentUserRank + "." : "--"}</Text>
+            </View>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <Icon color="#3fb3e6" name="user-md" type="font-awesome" size={25} />
+            </View>
+            <View style={{ flex: 4, alignItems: 'flex-start', justifyContent: 'center' }}>
+              <Text style={{ marginLeft: 10, paddingRight: 10 }}>{userToken} (You)</Text>
+            </View>
+            <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }}>
+              <Text>{currentUserLevelNumber}</Text>
+            </View>
+            <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
+              <Text style={{ fontWeight: 'bold', color: "#32815c" }}>{currentUserScore != null ? currentUserScore.toFixed(0) : "0"} xp</Text>
             </View>
           </View>
+
         </View>
         <View style={{ height: '10%', width: '80%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           {levels123.map((levelNumber) =>
@@ -300,7 +310,7 @@ const MiniRankListReactComponant = (props) => {
         style={{ width: 170, height: 70, marginBottom: 10, }} />
       <Image source={miniLeaderboardAddresses[levelNumber - 1]}
         style={{ width: 210, height: 40, marginBottom: 5 }} />
-      <View style={{ borderWidth: 1, height: '60%', width: '100%', borderRadius: 15, paddingTop: 10, }}>
+      <View style={{ borderWidth: 1, height: '60%', width: '100%', borderRadius: 16, paddingTop: 10, }}>
         {firstThreeUsers.map((oneUser, index) =>
           <View style={{ flexDirection: 'row', height: '25%', width: '100%' }}>
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
@@ -337,27 +347,30 @@ const MiniRankListReactComponant = (props) => {
 
 const loadGeneralLeaderboardData = (setRankList, setCurrentUserScore, setCurrentUserRank) => {
   let recordsObjs = []
-  fetch('https://users.encs.concordia.ca/~m_orooz/all-record.txt')
-    .then(response => response.text()).then(data => {
-      let lines = data.split('\n')
-      for (let i = 0; i < lines.length - 1; i++) {
-        let line = lines[i]
-        let obj = {}
-        let words = line.split("&")
-        for (let i = 0; i < words.length; i++) {
-          let keyValue = words[i]
-          let split = keyValue.split('=')
-          if (split[0] == "ip") {
-            continue;
-          }
-          let key = split[0]
-          let value = split[1]
-          obj[key] = value
+  fetch('https://users.encs.concordia.ca/~m_orooz/all-record.txt', {
+    headers: {
+      'Cache-Control': 'no-cache'
+    }
+  }).then(response => response.text()).then(data => {
+    let lines = data.split('\n')
+    for (let i = 0; i < lines.length - 1; i++) {
+      let line = lines[i]
+      let obj = {}
+      let words = line.split("&")
+      for (let i = 0; i < words.length; i++) {
+        let keyValue = words[i]
+        let split = keyValue.split('=')
+        if (split[0] == "ip") {
+          continue;
         }
-        recordsObjs.push(obj)
+        let key = split[0]
+        let value = split[1]
+        obj[key] = value
       }
-      genreralProcessingRecordsData(recordsObjs, setRankList, setCurrentUserScore, setCurrentUserRank)
-    })
+      recordsObjs.push(obj)
+    }
+    genreralProcessingRecordsData(recordsObjs, setRankList, setCurrentUserScore, setCurrentUserRank)
+  })
 }
 
 const genreralProcessingRecordsData = (recordsObjs, setRankList, setCurrentUserScore, setCurrentUserRank) => {
@@ -378,12 +391,13 @@ const genreralProcessingRecordsData = (recordsObjs, setRankList, setCurrentUserS
     let recordLevelNumber = recordsObjs[i]["levelNumber"]
     let userScore = recordsObjs[i]["lastScore"]
     let recordBingoNum = recordsObjs[i]["bingoNumber"]
-    let recordTimer = recordsObjs[i]["timerCount"]
+    //let recordTimer = recordsObjs[i]["timerCount"]
 
     if (recordBingoNum == 5)
       finishedLevel[userNickname][recordLevelNumber] = true
 
-    sumScores[userNickname][recordLevelNumber] += parseFloat(userScore) - (parseFloat(recordTimer) / 6.0)
+    //sumScores[userNickname][recordLevelNumber] += parseFloat(userScore) - (parseFloat(recordTimer) / 6.0)
+    sumScores[userNickname][recordLevelNumber] += parseFloat(userScore)
     roundCounter[userNickname][recordLevelNumber] += 1
   }
 
@@ -427,27 +441,31 @@ const genreralProcessingRecordsData = (recordsObjs, setRankList, setCurrentUserS
 
 const loadSemiLeaderboardData = (setRankList, setCurrentUserScore, setCurrentUserRank, levelNumber) => {
   let recordsObjs = []
-  fetch(`https://users.encs.concordia.ca/~m_orooz/levels/${levelNumber}.txt`)
-    .then(response => response.text()).then(data => {
-      let lines = data.split('\n')
-      for (let i = 0; i < lines.length - 1; i++) {
-        let line = lines[i]
-        let obj = {}
-        let words = line.split("&")
-        for (let i = 0; i < words.length; i++) {
-          let keyValue = words[i]
-          let split = keyValue.split('=')
-          if (split[0] == "ip") {
-            continue;
-          }
-          let key = split[0]
-          let value = split[1]
-          obj[key] = value
+  fetch(`https://users.encs.concordia.ca/~m_orooz/levels/${levelNumber}.txt`, {
+    headers: {
+      'Cache-Control': 'no-cache'
+    }
+  }).then(response => response.text()).then(data => {
+    console.log(data)
+    let lines = data.split('\n')
+    for (let i = 0; i < lines.length - 1; i++) {
+      let line = lines[i]
+      let obj = {}
+      let words = line.split("&")
+      for (let i = 0; i < words.length; i++) {
+        let keyValue = words[i]
+        let split = keyValue.split('=')
+        if (split[0] == "ip") {
+          continue;
         }
-        recordsObjs.push(obj)
+        let key = split[0]
+        let value = split[1]
+        obj[key] = value
       }
-      semiProcessingRecordsData(recordsObjs, setRankList, setCurrentUserScore, setCurrentUserRank)
-    })
+      recordsObjs.push(obj)
+    }
+    semiProcessingRecordsData(recordsObjs, setRankList, setCurrentUserScore, setCurrentUserRank)
+  })
 }
 const semiProcessingRecordsData = (recordsObjs, setRankList, setCurrentUserScore, setCurrentUserRank) => {
   let finishedLevel = {}
@@ -466,12 +484,13 @@ const semiProcessingRecordsData = (recordsObjs, setRankList, setCurrentUserScore
     let userNickname = recordsObjs[i]["nickname"]
     let userScore = recordsObjs[i]["lastScore"]
     let recordBingoNum = recordsObjs[i]["bingoNumber"]
-    let recordTimer = recordsObjs[i]["timerCount"]
+    //let recordTimer = recordsObjs[i]["timerCount"]
 
     if (recordBingoNum == 5)
       finishedLevel[userNickname] = true
 
-    sumScores[userNickname] += parseFloat(userScore) - (parseFloat(recordTimer) / 6.0)
+    //sumScores[userNickname] += parseFloat(userScore) - (parseFloat(recordTimer) / 6.0)
+    sumScores[userNickname] += parseFloat(userScore)
     roundCounter[userNickname] += 1
   }
 

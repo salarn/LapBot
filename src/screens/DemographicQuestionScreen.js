@@ -20,23 +20,15 @@ const DemographicQuestionScreen = ({ navigation }) => {
   const [answer2, setAnswer2] = useState({ value: '', error: '' })
   const [answer3, setAnswer3] = useState({ value: '', error: '' })
   const [answer4, setAnswer4] = useState({ value: '', error: '' })
-  const [answer5, setAnswer5] = useState({ value: '', error: '' })
+  const [answer5, setAnswer5] = useState({ value: 'CA', error: '' })
   const [answer6, setAnswer6] = useState({ value: '', error: '' })
-  const [answer7, setAnswer7] = useState({ value: '', error: '' })
-  const [answer8, setAnswer8] = useState({ value: 'CA', error: '' })
+
   const [countryCode, setCountryCode] = useState('CA')
   const [visible, setVisible] = useState(false)
   var userToken = null
 
-  const [name, setName] = useState({ value: '', error: '' })
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [gender, setGender] = useState({ value: '', error: '' })
-  const [age, setAge] = useState({ value: '', error: '' })
-
-  const AIKnowledgeOptions = ["Poor", "Fair", "Good", "Very good", "Excellent"]
-  const YesNoOptions = ["Yes", "No"]
+  const WhatAreyouOption = ["Medical student", "Post-graduate year 1", "Post-graduate year 2", "Post-graduate year 3", "Post-graduate year 4", "Post-graduate year 5+", "Clinical fellow", "Attending surgeon"]
   const hoursOptions = ["0", "2", "5", "10", "More than 10"]
-  const firstTofifthOptions = ["1", "2", "3", "4", "5"]
 
 
 
@@ -78,8 +70,6 @@ const DemographicQuestionScreen = ({ navigation }) => {
     formdata.append("q4", answer4.value)
     formdata.append("q5", answer5.value)
     formdata.append("q6", answer6.value)
-    formdata.append("q7", answer7.value)
-    formdata.append("q8", answer8.value)
     const requestOptions = {
       method: 'POST',
       body: formdata,
@@ -88,7 +78,7 @@ const DemographicQuestionScreen = ({ navigation }) => {
     fetch('https://users.encs.concordia.ca/~m_orooz/demographicInfo.php', requestOptions)
       .then(response => {
         responseStatus = response.status
-        AsyncStorage.setItem('alreadyLaunchedQuestioner', 'true')
+        AsyncStorage.setItem('alreadyLaunchedQuestioner', 'false')
         navigation.replace('MainTab')
       })
       .catch(error => {
@@ -97,10 +87,8 @@ const DemographicQuestionScreen = ({ navigation }) => {
   }
   const buttonDisabled = () => {
     if (answer1.value == '' || answer2.value == '' || answer3.value == '' ||
-      answer4.value == '' || answer6.value == '' ||
-      answer7.value == '' || answer8.value == '')
-      return true
-    if (answer4.value == 'Yes' && answer5.value == '')
+      answer4.value == '' || answer5.value == '' ||
+      answer6.value == '')
       return true
     return false
   }
@@ -116,72 +104,42 @@ const DemographicQuestionScreen = ({ navigation }) => {
         <Header>Demographic Questions</Header>
         <ViewGeneratorMultiAns
           containerStyle={styles.pickerContainer}
-          placeholder='Your AI knowledge'
-          titleText="Rate your current knowledge of AI"
+          placeholder='Medical grade'
+          titleText="Your recent medical grade"
           pickerStyle={styles.picker}
           input={answer1}
           setInput={setAnswer1}
-          inputOptions={AIKnowledgeOptions}
-          errorStyle={styles.pickerError}
-        />
-        <ViewGeneratorMultiAns
-          containerStyle={styles.pickerContainer}
-          placeholder='Try AI project before?'
-          titleText="Have you been involved in AI project development over last 2 years?"
-          pickerStyle={styles.picker}
-          input={answer2}
-          setInput={setAnswer2}
-          inputOptions={YesNoOptions}
+          inputOptions={WhatAreyouOption}
           errorStyle={styles.pickerError}
         />
         <ViewGeneratorMultiAns
           containerStyle={styles.pickerContainer}
           placeholder='Game playing hours weekly'
-          titleText="How many hours you're playing games weekly?"
+          titleText="On average, approximately how many hours of gaming do you play weekly?"
+          pickerStyle={styles.picker}
+          input={answer2}
+          setInput={setAnswer2}
+          inputOptions={hoursOptions}
+          errorStyle={styles.pickerError}
+        />
+        <ViewGeneratorMultiAns
+          containerStyle={styles.pickerContainer}
+          placeholder='Laparoscopic surgery experience'
+          titleText="Approximately how many total laparoscopic cholecystectomies have you performed to date (as primary surgeon or first assist)"
           pickerStyle={styles.picker}
           input={answer3}
           setInput={setAnswer3}
           inputOptions={hoursOptions}
           errorStyle={styles.pickerError}
         />
-        <ViewGeneratorMultiAns
-          containerStyle={styles.pickerContainer}
-          placeholder='Are you a surgical resident?'
-          titleText="Are you a surgical resident or consultant? "
-          pickerStyle={styles.picker}
-          input={answer4}
-          setInput={setAnswer4}
-          inputOptions={YesNoOptions}
-          errorStyle={styles.pickerError}
-        />
-        {answer4.value == "Yes" && <ViewGeneratorMultiAns
-          containerStyle={styles.pickerContainer}
-          placeholder='In which year of Residency are you?'
-          titleText="In which year of Residency are you?"
-          pickerStyle={styles.picker}
-          input={answer5}
-          setInput={setAnswer5}
-          inputOptions={firstTofifthOptions}
-          errorStyle={styles.pickerError}
-        />}
-        <ViewGeneratorMultiAns
-          containerStyle={styles.pickerContainer}
-          placeholder='Laparoscopic surgery experience'
-          titleText="How many laparoscopic cholecystectomies have you performed as primary surgeon or first assist in last year?"
-          pickerStyle={styles.picker}
-          input={answer6}
-          setInput={setAnswer6}
-          inputOptions={hoursOptions}
-          errorStyle={styles.pickerError}
-        />
         <TextInput
-          label="Training program name"
+          label="Institution / Training Program / Hospital"
           returnKeyType="done"
-          value={answer7.value}
+          value={answer4.value}
           autoCorrect={false}
-          onChangeText={text => setAnswer7({ value: text, error: '' })}
-          error={!!answer7.error}
-          errorText={answer7.error}
+          onChangeText={text => setAnswer4({ value: text, error: '' })}
+          error={!!answer4.error}
+          errorText={answer4.error}
         />
         <TouchableOpacity
           style={styles.countryContainer}
@@ -195,7 +153,7 @@ const DemographicQuestionScreen = ({ navigation }) => {
               countryCode,
               onSelect: (country) => {
                 setCountryCode(country.cca2)
-                setAnswer8({ value: country.cca2, error: '' })
+                setAnswer5({ value: country.cca2, error: '' })
               },
               withAlphaFilter: true,
               withCountryNameButton: true,
@@ -207,12 +165,21 @@ const DemographicQuestionScreen = ({ navigation }) => {
             }}
           />
         </TouchableOpacity>
+        <TextInput
+          label="City"
+          returnKeyType="done"
+          value={answer6.value}
+          autoCorrect={true}
+          onChangeText={text => setAnswer6({ value: text, error: '' })}
+          error={!!answer6.error}
+          errorText={answer6.error}
+        />
         <FormButton
           buttonTitle="Add my info"
           onPress={() => AddInfoButtonPress()}
           disabled={buttonDisabled()}
         />
-        <Text style={{ color: "red" }}>*please answer all the questions then push the button</Text>
+        <Text style={{ color: "red", marginTop: 10 }}>*Please answer all the questions then push the button</Text>
       </ScrollView>
     </Background >
   )

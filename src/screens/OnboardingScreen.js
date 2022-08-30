@@ -26,19 +26,19 @@ const Dots = ({ selected }) => {
 
 const Skip = ({ ...props }) => (
     <TouchableOpacity
-        style={{ marginHorizontal: 20 }}
+        style={{ marginHorizontal: 20, backgroundColor: 'rgba(255,255,255,0.7)', paddingHorizontal: 20, paddingVertical: 10, borderRadius: 10 }}
         {...props}
     >
-        <Text style={{ fontSize: 20 }}>Skip</Text>
+        <Text style={{ fontFamily: 'Palatino-Roman', fontSize: 20, fontWeight: 'bold' }}>Skip</Text>
     </TouchableOpacity>
 );
 
 const Next = ({ ...props }) => (
     <TouchableOpacity
-        style={{ marginHorizontal: 20 }}
+        style={{ marginHorizontal: 20, backgroundColor: 'rgba(255,255,255,0.7)', paddingHorizontal: 20, paddingVertical: 10, borderRadius: 10 }}
         {...props}
     >
-        <Text style={{ fontSize: 20 }}>Next</Text>
+        <Text style={{ fontFamily: 'Palatino-Roman', fontSize: 20, fontWeight: 'bold' }}>Next</Text>
     </TouchableOpacity>
 );
 
@@ -55,7 +55,7 @@ const OnboardingScreen = ({ navigation }) => {
     const onboardingRef = useRef(null);
     return (
         <ImageBackground
-            source={require('../Assets/Images/background-onboarding.png')}
+            source={require('../Assets/Images/background-splashScreen.png')}
             resizeMode="cover"
             style={{ flex: 1, justifyContent: "center" }}
         >
@@ -65,38 +65,53 @@ const OnboardingScreen = ({ navigation }) => {
                 NextButtonComponent={Next}
                 DoneButtonComponent={Done}
                 DotComponent={Dots}
-                skipToPage={3}
+                skipToPage={4}
                 showDone={false}
                 bottomBarColor={'#c3e4ee'}
                 pages={[
                     {
                         backgroundColor: 'rgba(255, 255, 255, 0.0)',
-                        image: <Image source={require('../Assets/Images/sitting-dr-croped2.gif')}
-                            style={styles.firstPageGIF} />,
-                        title: 'Learning Made Easy',
-                        subtitle: "With LapBot's activity modules, you'll learn to recognize Go Zones",
-
+                        image: <Image source={require('../Assets/Images/front-line-drs.gif')}
+                            style={styles.welcomePageGIF} />,
+                        title: 'Welcome to LapBot',
+                        subtitle: "",
+                        titleStyles: { fontFamily: 'Palatino-Roman', fontSize: 40 },
                     },
                     {
                         image: <Image source={require('../Assets/Images/two-dr-onboarding.gif')}
                             style={styles.secondPageGIF} />,
                         backgroundColor: 'rgba(255, 255, 255, 0.0)',
                         title: 'Design for Intuition',
-                        subtitle: 'So you always know what to do in the operarating room',
+                        subtitle: 'Test your surgical judgement for doing a safe laparoscopic cholecystectomy',
+                        titleStyles: { fontFamily: 'Palatino-Roman' },
+                        subTitleStyles: { fontFamily: 'Palatino-Roman', fontSize: 20 }
                     },
                     {
-                        image: <Image source={require('../Assets/Images/trophy-onboarding.gif')}
+                        backgroundColor: 'rgba(255, 255, 255, 0.0)',
+                        image: <Image source={require('../Assets/Images/sitting-dr-croped2.gif')}
+                            style={styles.firstPageGIF} />,
+                        title: 'Learning Made Easy',
+                        subtitle: "With LapBot's activity modules, you'll learn to recognize Go Zones",
+                        titleStyles: { fontFamily: 'Palatino-Roman' },
+                        subTitleStyles: { fontFamily: 'Palatino-Roman', fontSize: 20 }
+                    },
+                    {
+                        image: <Image source={require('../Assets/Images/compete-with-peers.gif')}
                             style={styles.thirdPageGIF} />,
                         backgroundColor: 'rgba(255, 255, 255, 0.0)',
                         title: 'Compete With Peers',
                         subtitle: 'See how you fare compared to your peers on the leaderboard',
+                        titleStyles: { marginTop: -60, fontFamily: 'Palatino-Roman' },
+                        subTitleStyles: { fontFamily: 'Palatino-Roman', fontSize: 20 }
                     },
                     {
                         image: <Image source={require('../Assets/Images/consent.png')}
                             style={styles.forthPageGIF} />,
-                        backgroundColor: 'rgba(255, 255, 255, 0.0)',
+                        backgroundColor: 'rgba(255, 255, 255, 1.0)',
                         title: 'Study Consent',
                         subtitle: consentDetailButton(navigation, onboardingRef),
+                        titleStyles: { fontFamily: 'Palatino-Roman' },
+                        subTitleStyles: { fontFamily: 'Palatino-Roman', fontSize: 20 }
                     },
                 ]}
             />
@@ -122,17 +137,10 @@ const consentDetailButton = (navigation, onboardingRef) => {
                 </Text>
                 <TouchableOpacity style={styles.acceptButtonContainer} onPress={() => {
                     AsyncStorage.setItem('alreadyLaunchedOnboarding', 'true');
-                    navigation.navigate("Login")
+                    navigation.navigate("Register")
                 }}>
                     <Text style={styles.acceptButtonText}>Accept</Text>
                 </TouchableOpacity>
-                {/*
-                <FormButton buttonTitle="Accept"
-                    onPress={() => {
-                        AsyncStorage.setItem('alreadyLaunchedOnboarding', 'true');
-                        navigation.navigate("Login")
-                    }} />
-                */}
                 <TouchableOpacity style={styles.refuseButtonContainer} onPress={() => onboardingRef.current.goToPage(0, true)}>
                     <Text style={styles.refuseButtonText}>Refuse</Text>
                 </TouchableOpacity>
@@ -148,6 +156,11 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    welcomePageGIF: {
+        marginTop: '30%',
+        width: '70%',
+        height: 220,
     },
     firstPageGIF: {
         marginTop: '30%',
@@ -168,10 +181,14 @@ const styles = StyleSheet.create({
         width: 200,
         height: 200,
     },
+    titleStyleOverride: {
+        marginTop: 0,
+    },
     tcP: {
         color: '#4d4d4d',
-        fontSize: 17,
+        fontSize: 18,
         marginBottom: 10,
+        fontFamily: 'Palatino-Roman',
     },
     refuseButtonContainer: {
         marginTop: 10,
@@ -184,9 +201,10 @@ const styles = StyleSheet.create({
         borderRadius: 3,
     },
     refuseButtonText: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
         color: '#fffdf7',
+        fontFamily: 'Palatino-Roman',
     },
     acceptButtonContainer: {
         marginTop: 10,
@@ -199,9 +217,10 @@ const styles = StyleSheet.create({
         borderRadius: 3,
     },
     acceptButtonText: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
         color: '#fffdf7',
+        fontFamily: 'Palatino-Roman',
     }
 })
 

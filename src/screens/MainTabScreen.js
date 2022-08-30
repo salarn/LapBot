@@ -51,7 +51,7 @@ const MainTabScreen = () => {
         component={LeaderboardScreen}
         options={{
           tabBarLabel: 'Leaderboard',
-          tabBarColor: '#f4666a',
+          tabBarColor: '#379b93',
           tabBarIcon: ({ color }) => (
             <Icon2 name="leaderboard" color={color} size={26} />
           ),

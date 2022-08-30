@@ -28,10 +28,6 @@ const LoginScreen = ({ navigation }) => {
       resizeMode="cover"
       style={styles.container}
     >
-      <Image
-        source={require('../Assets/Images/LOGO_Lapbot.png')}
-        style={styles.logo}
-      />
 
       <Image source={require('../Assets/Images/front-line-drs.gif')}
         style={styles.loginGif} />
@@ -62,6 +58,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     height: 250,
     width: '90%',
-    marginBottom: 40,
+    marginTop: 150,
+    marginBottom: 100,
   },
 });

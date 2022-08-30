@@ -135,7 +135,6 @@ const RegisterScreen = ({ navigation }) => {
           onPress={() => onSignUpPressed()}
         />
       </ScrollView>
-      <BackButton navigation={navigation} />
     </Background>
   )
 }

@@ -69,7 +69,6 @@ const NextLevelScreen = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <ExitButton navigation={navigation} backLocationString="MainTab" />
       <Modal
         supportedOrientations={['landscape-right']}
         animationType='slide'
@@ -97,6 +96,16 @@ const RankListReactComponant = (props) => {
     require('../Assets/Images/medal2.png'),
     require('../Assets/Images/medal3.png')
   ]
+
+  let miniLeaderboardAddresses = [
+    require('../Assets/Images/miniLeaderboard1.png'),
+    require('../Assets/Images/miniLeaderboard2.png'),
+    require('../Assets/Images/miniLeaderboard3.png'),
+    require('../Assets/Images/miniLeaderboard4.png'),
+    require('../Assets/Images/miniLeaderboard5.png'),
+    require('../Assets/Images/miniLeaderboard6.png')
+  ]
+
   for (let i = 0; i < 3; i++) {
     if (rankList.length <= i)
       firstThreeUsers.push(["-----", 0.00])
@@ -104,10 +113,11 @@ const RankListReactComponant = (props) => {
       firstThreeUsers.push(rankList[i])
   }
   return (
-    <View style={{ alignItems: 'center', }}>
-      <Text style={{ marginBottom: 20, fontSize: 30 }}>Level {levelNumber}'s Leaderboard </Text>
+    <View style={{ alignItems: 'center', height: '90%', width: '50%' }}>
       <Image source={require('../Assets/Images/Podium2.png')}
         style={styles.leaderBoardPNG} />
+      <Image source={miniLeaderboardAddresses[levelNumber - 1]}
+        style={{ width: 210, height: 40, marginBottom: 10 }} />
       <View style={{ borderWidth: 1, height: '60%', width: '100%', borderRadius: 15, paddingTop: 10 }}>
         {firstThreeUsers.map((oneUser, index) =>
           <View style={{ flexDirection: 'row', flex: 2 }}>
@@ -134,7 +144,7 @@ const RankListReactComponant = (props) => {
               <Text style={{ marginLeft: 20 }}>{userToken} (You)</Text>
             </View>
             <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
-              <Text style={{ color: "#32815c" }}>{currentUserScore.toFixed(2)} xp</Text>
+              <Text style={{ color: "#32815c" }}>{currentUserScore != null ? currentUserScore.toFixed(2) : "0.00"} xp</Text>
             </View>
           </View>
         </View>
@@ -145,29 +155,32 @@ const RankListReactComponant = (props) => {
 
 const loadSemiLeaderboardData = (setRankList, setCurrentUserScore, setCurrentUserRank, levelNumber) => {
   let recordsObjs = []
-  fetch(`https://users.encs.concordia.ca/~m_orooz/levels/${levelNumber}.txt`)
-    .then(response => response.text()).then(data => {
-      let lines = data.split('\n')
-      for (let i = 0; i < lines.length - 1; i++) {
-        let line = lines[i]
-        //jsonStr = "{"
-        let obj = {}
-        let words = line.split("&")
-        for (let i = 0; i < words.length; i++) {
-          let keyValue = words[i]
-          let split = keyValue.split('=')
-          if (split[0] == "ip") {
-            continue;
-          }
-          //jsonStr += "\"" + split[0] + "\"" + ":" + "\"" + split[1] + "\"" + ","
-          let key = split[0]
-          let value = split[1]
-          obj[key] = value
+  fetch(`https://users.encs.concordia.ca/~m_orooz/levels/${levelNumber}.txt`, {
+    headers: {
+      'Cache-Control': 'no-cache'
+    }
+  }).then(response => response.text()).then(data => {
+    let lines = data.split('\n')
+    for (let i = 0; i < lines.length - 1; i++) {
+      let line = lines[i]
+      //jsonStr = "{"
+      let obj = {}
+      let words = line.split("&")
+      for (let i = 0; i < words.length; i++) {
+        let keyValue = words[i]
+        let split = keyValue.split('=')
+        if (split[0] == "ip") {
+          continue;
         }
-        recordsObjs.push(obj)
+        //jsonStr += "\"" + split[0] + "\"" + ":" + "\"" + split[1] + "\"" + ","
+        let key = split[0]
+        let value = split[1]
+        obj[key] = value
       }
-      processingRecordsData(recordsObjs, setRankList, setCurrentUserScore, setCurrentUserRank)
-    })
+      recordsObjs.push(obj)
+    }
+    processingRecordsData(recordsObjs, setRankList, setCurrentUserScore, setCurrentUserRank)
+  })
 }
 const processingRecordsData = (recordsObjs, setRankList, setCurrentUserScore, setCurrentUserRank) => {
   let finishedLevel = {}
@@ -186,12 +199,14 @@ const processingRecordsData = (recordsObjs, setRankList, setCurrentUserScore, se
     let userNickname = recordsObjs[i]["nickname"]
     let userScore = recordsObjs[i]["lastScore"]
     let recordBingoNum = recordsObjs[i]["bingoNumber"]
-    let recordTimer = recordsObjs[i]["timerCount"]
+
+    //DELETE TIMER let recordTimer = recordsObjs[i]["timerCount"]
 
     if (recordBingoNum == 5)
       finishedLevel[userNickname] = true
 
-    sumScores[userNickname] += parseFloat(userScore) - (parseFloat(recordTimer) / 6.0)
+    sumScores[userNickname] += parseFloat(userScore)
+    //DELETE TIMER sumScores[userNickname] += parseFloat(userScore) - (parseFloat(recordTimer) / 6.0)
     roundCounter[userNickname] += 1
   }
 
@@ -295,6 +310,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 60,
     marginTop: 0,
+    marginBottom: 10,
   },
 })
 
