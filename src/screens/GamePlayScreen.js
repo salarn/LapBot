@@ -83,7 +83,7 @@ const GamePlayScreen = ({ navigation, route }) => {
   useEffect(async () => {
     if (lastTouchX != null) {
       let currentScore = await ScoreCalculator(lastTouchX / GameFrameWidth, lastTouchY / GameFrameHeight, levelNumber, roundNumber, OriginalFrameWidth, OriginalFrameHeight)
-      console.log("##" + currentScore)
+      //console.log("##" + currentScore)
       setLastScore(currentScore)
     }
   }, [lastTouchX])

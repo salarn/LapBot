@@ -12,9 +12,6 @@ import LevelsScreen from './LevelsScreen'
 import TutorialScreen from './TutorialScreen'
 import LeaderboardScreen from './LeaderboardScreen';
 
-const HomeStack = createNativeStackNavigator();
-const DetailsStack = createStackNavigator();
-
 const Tab = createMaterialBottomTabNavigator();
 
 const MainTabScreen = () => {
@@ -62,34 +59,3 @@ const MainTabScreen = () => {
 }
 
 export default MainTabScreen;
-
-const HomeStackScreen = ({ navigation }) => (
-  <HomeStack.Navigator screenOptions={{
-    headerStyle: {
-      backgroundColor: '#009387',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold'
-    }
-  }} >
-    <HomeStack.Screen name="Levels" component={LevelsScreen} options={{
-      title: 'Level Screen',
-      //orientation: 'landscape_right'
-    }} />
-  </HomeStack.Navigator>
-);
-
-const DetailsStackScreen = ({ navigation }) => (
-  <DetailsStack.Navigator screenOptions={{
-    headerStyle: {
-      backgroundColor: '#1f65ff',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold'
-    }
-  }}>
-    <DetailsStack.Screen name="Details" component={LevelsScreen} options={{}} />
-  </DetailsStack.Navigator>
-);

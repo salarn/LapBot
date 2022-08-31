@@ -71,7 +71,7 @@ const LeaderboardScreen = ({ navigation }) => {
   let firstThreeUsers = []
   let forthToTenthUsers = []
   let levels123 = [1, 2, 3]
-  let levels456 = [4, 5, 6]
+  let levels45 = [4, 5]
   let medalImages = [
     require('../Assets/Images/medal1.png'),
     require('../Assets/Images/medal2.png'),
@@ -183,8 +183,8 @@ const LeaderboardScreen = ({ navigation }) => {
             </TouchableOpacity>
           )}
         </View>
-        <View style={{ height: '10%', width: '80%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-          {levels456.map((levelNumber) =>
+        <View style={{ height: '10%', width: '80%', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', marginBottom: 10 }}>
+          {levels45.map((levelNumber) =>
             <TouchableOpacity style={styles.levelButtonContainer} onPress={() => {
               setModalRankList(null)
               setModalLevelNumber(levelNumber)

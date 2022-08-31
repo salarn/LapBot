@@ -29,7 +29,7 @@ const Skip = ({ ...props }) => (
         style={{ marginHorizontal: 20, backgroundColor: 'rgba(255,255,255,0.7)', paddingHorizontal: 20, paddingVertical: 10, borderRadius: 10 }}
         {...props}
     >
-        <Text style={{ fontFamily: 'Palatino-Roman', fontSize: 20, fontWeight: 'bold' }}>Skip</Text>
+        <Text style={{ fontFamily: 'GillSans', fontSize: 20, }}>Skip</Text>
     </TouchableOpacity>
 );
 
@@ -38,7 +38,7 @@ const Next = ({ ...props }) => (
         style={{ marginHorizontal: 20, backgroundColor: 'rgba(255,255,255,0.7)', paddingHorizontal: 20, paddingVertical: 10, borderRadius: 10 }}
         {...props}
     >
-        <Text style={{ fontFamily: 'Palatino-Roman', fontSize: 20, fontWeight: 'bold' }}>Next</Text>
+        <Text style={{ fontFamily: 'GillSans', fontSize: 20, }}>Next</Text>
     </TouchableOpacity>
 );
 
@@ -75,7 +75,7 @@ const OnboardingScreen = ({ navigation }) => {
                             style={styles.welcomePageGIF} />,
                         title: 'Welcome to LapBot',
                         subtitle: "",
-                        titleStyles: { fontFamily: 'Palatino-Roman', fontSize: 40 },
+                        titleStyles: { fontFamily: 'GillSans-SemiBoldItalic', fontSize: 40 },
                     },
                     {
                         image: <Image source={require('../Assets/Images/two-dr-onboarding.gif')}
@@ -83,8 +83,8 @@ const OnboardingScreen = ({ navigation }) => {
                         backgroundColor: 'rgba(255, 255, 255, 0.0)',
                         title: 'Design for Intuition',
                         subtitle: 'Test your surgical judgement for doing a safe laparoscopic cholecystectomy',
-                        titleStyles: { fontFamily: 'Palatino-Roman' },
-                        subTitleStyles: { fontFamily: 'Palatino-Roman', fontSize: 20 }
+                        titleStyles: { fontFamily: 'GillSans-SemiBold' },
+                        subTitleStyles: { fontFamily: 'GillSans', fontSize: 20 }
                     },
                     {
                         backgroundColor: 'rgba(255, 255, 255, 0.0)',
@@ -92,8 +92,8 @@ const OnboardingScreen = ({ navigation }) => {
                             style={styles.firstPageGIF} />,
                         title: 'Learning Made Easy',
                         subtitle: "With LapBot's activity modules, you'll learn to recognize Go Zones",
-                        titleStyles: { fontFamily: 'Palatino-Roman' },
-                        subTitleStyles: { fontFamily: 'Palatino-Roman', fontSize: 20 }
+                        titleStyles: { fontFamily: 'GillSans-SemiBold' },
+                        subTitleStyles: { fontFamily: 'GillSans', fontSize: 20 }
                     },
                     {
                         image: <Image source={require('../Assets/Images/compete-with-peers.gif')}
@@ -101,8 +101,8 @@ const OnboardingScreen = ({ navigation }) => {
                         backgroundColor: 'rgba(255, 255, 255, 0.0)',
                         title: 'Compete With Peers',
                         subtitle: 'See how you fare compared to your peers on the leaderboard',
-                        titleStyles: { marginTop: -60, fontFamily: 'Palatino-Roman' },
-                        subTitleStyles: { fontFamily: 'Palatino-Roman', fontSize: 20 }
+                        titleStyles: { marginTop: -60, fontFamily: 'GillSans-SemiBold' },
+                        subTitleStyles: { fontFamily: 'GillSans', fontSize: 20 }
                     },
                     {
                         image: <Image source={require('../Assets/Images/consent.png')}
@@ -110,8 +110,8 @@ const OnboardingScreen = ({ navigation }) => {
                         backgroundColor: 'rgba(255, 255, 255, 1.0)',
                         title: 'Study Consent',
                         subtitle: consentDetailButton(navigation, onboardingRef),
-                        titleStyles: { fontFamily: 'Palatino-Roman' },
-                        subTitleStyles: { fontFamily: 'Palatino-Roman', fontSize: 20 }
+                        titleStyles: { fontFamily: 'GillSans-SemiBold' },
+                        subTitleStyles: { fontFamily: 'GillSans', fontSize: 20 }
                     },
                 ]}
             />
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
         color: '#4d4d4d',
         fontSize: 18,
         marginBottom: 10,
-        fontFamily: 'Palatino-Roman',
+        fontFamily: 'GillSans',
     },
     refuseButtonContainer: {
         marginTop: 10,
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#fffdf7',
-        fontFamily: 'Palatino-Roman',
+        fontFamily: 'GillSans-SemiBold',
     },
     acceptButtonContainer: {
         marginTop: 10,
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#fffdf7',
-        fontFamily: 'Palatino-Roman',
+        fontFamily: 'GillSans-SemiBold',
     }
 })
 
