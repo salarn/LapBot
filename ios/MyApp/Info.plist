@@ -5,12 +5,33 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>MyApp</string>
+	<string>LapBot</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIconFiles</key>
+	<array>
+		<string>Original-20-1.png</string>
+		<string>Original-29-1.png</string>
+		<string>Original-40-1.png</string>
+		<string>Original-40-2.png</string>
+		<string>Original-40-3.png</string>
+		<string>Original-58-1.png</string>
+		<string>Original-58-2.png</string>
+		<string>Original-60-1.png</string>
+		<string>Original-76-1.png</string>
+		<string>Original-80-1.png</string>
+		<string>Original-80-2.png</string>
+		<string>Original-87-1.png</string>
+		<string>Original-120-1.png</string>
+		<string>Original-120-2.png</string>
+		<string>Original-152-1.png</string>
+		<string>Original-167-1.png</string>
+		<string>Original-180-1.png</string>
+		<string>Original-1024-1.png</string>
+	</array>
+	<key>CFBundleIconName</key>
+	<string>AppIcon1</string>
 	<key>CFBundleIcons</key>
-	<dict/>
-	<key>CFBundleIcons~ipad</key>
 	<dict/>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
