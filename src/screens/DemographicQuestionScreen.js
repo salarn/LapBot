@@ -29,6 +29,7 @@ const DemographicQuestionScreen = ({ navigation }) => {
 
   const WhatAreyouOption = ["Medical student", "Post-graduate year 1", "Post-graduate year 2", "Post-graduate year 3", "Post-graduate year 4", "Post-graduate year 5+", "Clinical fellow", "Attending surgeon"]
   const hoursOptions = ["0", "2", "5", "10", "More than 10"]
+  const surgeryOptions = ["0", "1-50", "51-100", "101-250", "251-500", "501-1000", ">1000"]
 
 
 
@@ -104,8 +105,8 @@ const DemographicQuestionScreen = ({ navigation }) => {
         <Header>Demographic Questions</Header>
         <ViewGeneratorMultiAns
           containerStyle={styles.pickerContainer}
-          placeholder='Medical grade'
-          titleText="Your recent medical grade"
+          placeholder='Role'
+          titleText="Please select your current role"
           pickerStyle={styles.picker}
           input={answer1}
           setInput={setAnswer1}
@@ -114,8 +115,8 @@ const DemographicQuestionScreen = ({ navigation }) => {
         />
         <ViewGeneratorMultiAns
           containerStyle={styles.pickerContainer}
-          placeholder='Game playing hours weekly'
-          titleText="On average, approximately how many hours of gaming do you play weekly?"
+          placeholder='Game experience'
+          titleText="Approximately how many hours per week do you play mobile gaming apps?"
           pickerStyle={styles.picker}
           input={answer2}
           setInput={setAnswer2}
@@ -124,12 +125,12 @@ const DemographicQuestionScreen = ({ navigation }) => {
         />
         <ViewGeneratorMultiAns
           containerStyle={styles.pickerContainer}
-          placeholder='Laparoscopic surgery experience'
+          placeholder='Total case volume'
           titleText="Approximately how many total laparoscopic cholecystectomies have you performed to date (as primary surgeon or first assist)"
           pickerStyle={styles.picker}
           input={answer3}
           setInput={setAnswer3}
-          inputOptions={hoursOptions}
+          inputOptions={surgeryOptions}
           errorStyle={styles.pickerError}
         />
         <TextInput

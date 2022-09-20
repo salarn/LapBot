@@ -17,6 +17,8 @@ import GamePlayScreen from '../screens/GamePlayScreen'
 import FeedbackScreen from '../screens/FeedbackScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import NextLevelScreen from './NextLevelScreen';
+import { Image } from 'react-native-elements';
+import { BackgroundImage } from 'react-native-elements/dist/config';
 
 const GameStack = createNativeStackNavigator();
 
@@ -28,8 +30,8 @@ const GameScreen = ({ navigation }) => {
   useEffect(() => {
     AsyncStorage.getItem('levelNumber').then((value) => {
       if (value == null) {
-        setLevelNumber(parseInt(1))
-        AsyncStorage.setItem('levelNumber', "1")
+        setLevelNumber(parseInt(0))
+        AsyncStorage.setItem('levelNumber', "0")
       } else {
         setLevelNumber(value)
       }
@@ -53,7 +55,7 @@ const GameScreen = ({ navigation }) => {
   })
 
   return (
-    <GameStack.Navigator initialRouteName={'RotatePhone'}>
+    <GameStack.Navigator initialRouteName={'RotatePhoneToLandScape'}>
       <GameStack.Screen name='RotatePhoneToLandScape'
         component={RotatePhoneScreenToLandScape}
         options={{ header: () => null }} />
@@ -73,12 +75,20 @@ const GameScreen = ({ navigation }) => {
 
 
 const styles = StyleSheet.create({
-  rotatePhone: {
+  rotateImageContainer: {
     flex: 1,
-    justifyContent: 'center',
+    alignContent: 'center',
     alignItems: 'center',
-    padding: 10,
+    alignSelf: 'center',
+    justifyContent: 'center',
     backgroundColor: '#f7f7f7',
+    width: '100%',
+    height: '100%',
+    padding: 10,
+  },
+  rotatePhone: {
+    height: 200,
+    width: 250,
   },
 })
 
@@ -92,11 +102,12 @@ const RotatePhoneScreenToLandScape = ({ navigation }) => {
     return () => clearTimeout(timer)
   })
   return (
-    <ImageBackground
-      source={require('../Assets/Images/rotatePhone.png')}
-      resizeMode="center"
-      style={styles.rotatePhone}
-    />
+    <View style={styles.rotateImageContainer}>
+      <Image
+        source={require('../Assets/Images/rotatePhone.png')}
+        style={styles.rotatePhone}
+      />
+    </View>
   )
 }
 

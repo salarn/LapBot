@@ -13,6 +13,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { windowWidth } from '@/utils/Dimentions';
 
 const circlePosision = [
   [null, null],
@@ -35,7 +36,7 @@ const LevelsScreen = ({ navigation }) => {
     })
     AsyncStorage.getItem('levelNumber').then((value) => {
       if (value == null) {
-        setLevelNumber(1)
+        setLevelNumber(0)
       } else {
         setLevelNumber(parseInt(value))
       }
@@ -55,7 +56,50 @@ const LevelsScreen = ({ navigation }) => {
       </SafeAreaView>
     )
   }
-
+  if (levelNumber == 0) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#7ec5dc' }}>
+        <ImageBackground
+          source={require('../Assets/Images/levelsBackGround.png')}
+          resizeMode="stretch"
+          imageStyle={{ opacity: 0.2 }}
+          style={{ flex: 1 }}>
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <Image source={require('../Assets/Images/nurse-woman-exercise-stock-gifs.gif')}
+              style={{ height: windowWidth * 0.8, width: windowWidth * 0.8 }} />
+            <TouchableOpacity style={{
+              width: 200, height: 200, borderWidth: 6, borderRadius: 100, borderColor: 'rgba(30, 143, 4,0.4)', justifyContent: 'center', alignItems: 'center'
+              , backgroundColor: 'rgba(30, 143, 4,0.3)', marginTop: 50,
+            }} onPress={() => navigation.replace('Game')}>
+              <Text style={{ fontSize: 40, color: '#f8f0e3', textAlign: 'center' }} >Practice</Text>
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
+      </SafeAreaView>
+    )
+  }
+  if (levelNumber >= 6) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#7ec5dc' }}>
+        <ImageBackground
+          source={require('../Assets/Images/levelsBackGround.png')}
+          resizeMode="stretch"
+          imageStyle={{ opacity: 0.2 }}
+          style={{ flex: 1 }}>
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <Image source={require('../Assets/Images/nurse-woman-trophy-stock-gifs.gif')}
+              style={{ height: windowWidth * 0.9, width: windowWidth * 0.9 }} />
+            <TouchableOpacity style={{
+              width: 200, height: 200, borderWidth: 6, borderRadius: 100, borderColor: 'rgba(254, 191, 62,0.7)', justifyContent: 'center', alignItems: 'center'
+              , backgroundColor: 'rgba(254, 191, 62,0.5)', marginTop: 50,
+            }} onPress={() => navigation.replace('Game')} disabled={true}>
+              <Text style={{ fontSize: 35, color: 'black', textAlign: 'center' }} >You won{'\n'}the game</Text>
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
+      </SafeAreaView>
+    )
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#7ec5dc' }}>
@@ -78,7 +122,7 @@ const GameButton = ({ levelNumber, navigation }) => {
           width: 200, height: 200, borderWidth: 6, borderRadius: 100, borderColor: 'rgba(143, 25, 4,0.4)', justifyContent: 'center', alignItems: 'center'
           , backgroundColor: 'rgba(143, 25, 4,0.3)', left: circlePosision[levelNumber][0], top: circlePosision[levelNumber][1]
         }} onPress={() => navigation.replace('Game')} disabled={true}>
-          <Text style={{ fontSize: 50, color: '#f8f0e3' }} >Finished</Text>
+          <Text style={{ fontSize: 40, color: '#f8f0e3' }} >Finished</Text>
         </TouchableOpacity>
       </View>
     )
@@ -89,7 +133,7 @@ const GameButton = ({ levelNumber, navigation }) => {
         width: 200, height: 200, borderWidth: 6, borderRadius: 100, borderColor: 'rgba(30, 143, 4,0.4)', justifyContent: 'center', alignItems: 'center'
         , backgroundColor: 'rgba(30, 143, 4,0.3)', left: circlePosision[levelNumber][0], top: circlePosision[levelNumber][1]
       }} onPress={() => navigation.replace('Game')}>
-        <Text style={{ fontSize: 50, color: '#f8f0e3' }} > Level {levelNumber}</Text>
+        <Text style={{ fontSize: 45, color: '#f8f0e3' }} >Level {levelNumber}</Text>
       </TouchableOpacity>
     </View>
   )

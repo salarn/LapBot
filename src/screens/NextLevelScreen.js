@@ -47,8 +47,10 @@ const NextLevelScreen = ({ route, navigation }) => {
       <View style={styles.container}>
         <View style={styles.leftContainer}>
           <Text style={styles.congratsText}>Congrats on passing level {levelNumber}{'\n'}Your score was {currentUserScore ? currentUserScore.toFixed(0) : "--"}</Text>
-          <Image source={require('../Assets/Images/trophy-onboarding.gif')}
-            style={styles.congratsGif} />
+          <View style={{ height: '60%' }}>
+            <Image source={require('../Assets/Images/trophy-onboarding.gif')}
+              style={styles.congratsGif} />
+          </View>
         </View>
         <View>
           <View style={styles.IconsContainer}>
@@ -238,12 +240,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    padding: 20,
+    //padding: 20,
     flexDirection: 'row',
     flexGrow: 20,
   },
   leftContainer: {
     width: '70%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -252,15 +255,17 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     marginTop: 30,
+    //paddingTop: 30,
     fontWeight: 'bold',
     color: '#0ca284',
     lineHeight: 50,
+    height: '40%',
   },
   congratsGif: {
     width: 200,
-    height: 200,
-    marginTop: 0,
-    marginBottom: -10
+    height: '80%',
+    //marginTop: -20,
+    //marginBottom: -10
   },
   IconsContainer: {
     justifyContent: 'space-evenly',

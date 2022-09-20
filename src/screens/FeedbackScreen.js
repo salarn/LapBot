@@ -66,12 +66,12 @@ const GamePlayScreen = ({ route, navigation }) => {
           </View>
         </View>
         <View style={styles.animationGif}>
-          <Image source={lastScore >= roundPassLimit ? require('../Assets/Images/correct-gif.gif') : require('../Assets/Images/wrong-gif.gif')}
+          <Image source={lastScore >= roundPassLimit ? require('../Assets/Images/nurse-woman-cheering-stock-gifs.gif') : require('../Assets/Images/nurse-woman-crying-stock-gifs.gif')}
             rep
             style={{
               height: '100%',
               width: '100%',
-              marginTop: 70,
+              marginTop: 20,
             }}
           />
         </View>
@@ -103,7 +103,7 @@ const GamePlayScreen = ({ route, navigation }) => {
             </View>
           </View>
           <View style={{ alignSelf: 'center', marginTop: 10 }}>
-            <FormButton buttonTitle='Next Round' onPress={() => GoToNextRound(navigation, bingoNumber, levelNumber)} />
+            <FormButton buttonTitle='Next Round' onPress={() => GoToNextRound(navigation, bingoNumber, levelNumber, roundNumber)} />
           </View>
         </View>
       </View>
@@ -166,9 +166,19 @@ const GamePlayScreen = ({ route, navigation }) => {
 
 };
 
-const GoToNextRound = (navigation, bingoNumber, levelNumber) => {
+const GoToNextRound = (navigation, bingoNumber, levelNumber, roundNumber) => {
   //Going to next level
-  if (bingoNumber == 5) {
+
+  //Practice
+  if (levelNumber == 0 && roundNumber == 2) {
+    let nextLevel = parseInt(levelNumber) + 1;
+    AsyncStorage.setItem('levelNumber', String(nextLevel))
+    AsyncStorage.setItem('roundNumber', "1")
+    AsyncStorage.setItem('bingoNumber', "0")
+
+    navigation.replace('RotatePhoneToPortrait')
+  }
+  else if (bingoNumber == 5) {
     let nextLevel = parseInt(levelNumber) + 1;
     AsyncStorage.setItem('levelNumber', String(nextLevel))
     AsyncStorage.setItem('roundNumber', "1")
@@ -267,7 +277,7 @@ const styles = StyleSheet.create({
   },
   animationGif: {
     width: '30%',
-    height: '60%',
+    height: '90%',
     marginRight: -20,
     marginLeft: -40
   },

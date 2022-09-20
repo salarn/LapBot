@@ -75,34 +75,34 @@ const OnboardingScreen = ({ navigation }) => {
                             style={styles.welcomePageGIF} />,
                         title: 'Welcome to LapBot',
                         subtitle: "",
-                        titleStyles: { fontFamily: 'GillSans-SemiBoldItalic', fontSize: 40 },
+                        titleStyles: { fontFamily: 'GillSans-SemiBoldItalic', fontSize: 40, paddingHorizontal: 15 },
                     },
                     {
                         image: <Image source={require('../Assets/Images/two-dr-onboarding.gif')}
                             style={styles.secondPageGIF} />,
                         backgroundColor: 'rgba(255, 255, 255, 0.0)',
-                        title: 'Design for Intuition',
-                        subtitle: 'Test your surgical judgement for doing a safe laparoscopic cholecystectomy',
+                        title: '',
+                        subtitle: 'Play the game to test how well you perform a Laparoscopic Cholecystectomy!',
                         titleStyles: { fontFamily: 'GillSans-SemiBold' },
-                        subTitleStyles: { fontFamily: 'GillSans', fontSize: 20 }
+                        subTitleStyles: { fontFamily: 'GillSans', fontSize: 20, paddingHorizontal: 10 }
                     },
                     {
                         backgroundColor: 'rgba(255, 255, 255, 0.0)',
                         image: <Image source={require('../Assets/Images/sitting-dr-croped2.gif')}
                             style={styles.firstPageGIF} />,
                         title: 'Learning Made Easy',
-                        subtitle: "With LapBot's activity modules, you'll learn to recognize Go Zones",
+                        subtitle: "Recognize Safe and Dangerous Zones of Dissection",
                         titleStyles: { fontFamily: 'GillSans-SemiBold' },
-                        subTitleStyles: { fontFamily: 'GillSans', fontSize: 20 }
+                        subTitleStyles: { fontFamily: 'GillSans', fontSize: 20, paddingHorizontal: 15 }
                     },
                     {
                         image: <Image source={require('../Assets/Images/compete-with-peers.gif')}
                             style={styles.thirdPageGIF} />,
                         backgroundColor: 'rgba(255, 255, 255, 0.0)',
-                        title: 'Compete With Peers',
-                        subtitle: 'See how you fare compared to your peers on the leaderboard',
+                        title: '',
+                        subtitle: 'Compete With Your Peers on the Leaderboard',
                         titleStyles: { marginTop: -60, fontFamily: 'GillSans-SemiBold' },
-                        subTitleStyles: { fontFamily: 'GillSans', fontSize: 20 }
+                        subTitleStyles: { fontFamily: 'GillSans', fontSize: 20, paddingHorizontal: 15 }
                     },
                     {
                         image: <Image source={require('../Assets/Images/consent.png')}
@@ -159,8 +159,8 @@ const styles = StyleSheet.create({
     },
     welcomePageGIF: {
         marginTop: '30%',
-        width: '70%',
-        height: 220,
+        width: 250,
+        height: 180,
     },
     firstPageGIF: {
         marginTop: '30%',

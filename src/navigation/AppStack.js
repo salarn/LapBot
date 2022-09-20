@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ImageBackground, StyleSheet, } from 'react-native'
+import { ImageBackground, StyleSheet, View, Image } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -54,12 +54,20 @@ const AppStack = () => {
 }
 
 const styles = StyleSheet.create({
-  rotatePhone: {
+  rotateImageContainer: {
     flex: 1,
-    justifyContent: 'center',
+    alignContent: 'center',
     alignItems: 'center',
-    padding: 10,
+    alignSelf: 'center',
+    justifyContent: 'center',
     backgroundColor: '#f7f7f7',
+    width: '100%',
+    height: '100%',
+    padding: 10,
+  },
+  rotatePhone: {
+    height: 200,
+    width: 250,
   },
 })
 
@@ -72,10 +80,11 @@ const RotatePhoneScreenToPortrait = ({ navigation }) => {
     return () => clearTimeout(timer)
   })
   return (
-    <ImageBackground
-      source={require('../Assets/Images/rotatePhone.png')}
-      resizeMode="center"
-      style={styles.rotatePhone}
-    />
+    <View style={styles.rotateImageContainer}>
+      <Image
+        source={require('../Assets/Images/rotatePhone.png')}
+        style={styles.rotatePhone}
+      />
+    </View>
   )
 }

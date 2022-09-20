@@ -3,7 +3,11 @@ import React from 'react';
 
 const GameData = {
   heatmapFrame: [
-    [null],
+    [
+      null,
+      require('../Assets/QuestionBank/Level1-heatmap-frame/25.png'),
+      require('../Assets/QuestionBank/Level1-heatmap-frame/26.png'),
+    ],
     [
       null,
       require('../Assets/QuestionBank/Level1-heatmap-frame/1.png'),
@@ -112,7 +116,11 @@ const GameData = {
     ],
   ],
   heatmapVideo: [
-    [null],
+    [
+      null,
+      require('../Assets/QuestionBank/Level1-heatmap-video/25.mp4'),
+      require('../Assets/QuestionBank/Level1-heatmap-video/26.mp4'),
+    ],
     [
       null,
       require('../Assets/QuestionBank/Level1-heatmap-video/1.mp4'),
@@ -221,7 +229,11 @@ const GameData = {
     ],
   ],
   rawFrame: [
-    [null],
+    [
+      null,
+      require('../Assets/QuestionBank/Level1-raw-frame/25.jpg'),
+      require('../Assets/QuestionBank/Level1-raw-frame/26.jpg'),
+    ],
     [
       null,
       require('../Assets/QuestionBank/Level1-raw-frame/1.jpg'),
@@ -330,7 +342,11 @@ const GameData = {
     ],
   ],
   rawVideo: [
-    [null],
+    [
+      null,
+      require('../Assets/QuestionBank/Level1-raw-video/25.mp4'),
+      require('../Assets/QuestionBank/Level1-raw-video/26.mp4'),
+    ],
     [
       null,
       require('../Assets/QuestionBank/Level1-raw-video/1.mp4'),
@@ -439,7 +455,11 @@ const GameData = {
     ],
   ],
   scoreFrame: [
-    [null],
+    [
+      null,
+      require('../Assets/QuestionBank/Level1-score-frame/25.png'),
+      require('../Assets/QuestionBank/Level1-score-frame/26.png'),
+    ],
     [
       null,
       require('../Assets/QuestionBank/Level1-score-frame/1.png'),
@@ -547,7 +567,7 @@ const GameData = {
       require('../Assets/QuestionBank/Level5-score-frame/10.png'),
     ],
   ],
-  numberOfRoundsInLevel: [null, 26, 24, 17, 14, 10],
+  numberOfRoundsInLevel: [2, 26, 24, 17, 14, 10],
 };
 
 export default GameData;

@@ -170,7 +170,7 @@ const GamePlayScreen = ({ navigation, route }) => {
             ) : (
               <View>
                 <Icon reverse name="hair-cross" type="entypo" size={50} onPress={() => { setQuizVisible(true) }} />
-                <Text style={{ alignSelf: 'center', marginTop: 6, fontSize: 15, fontWeight: 'bold' }}>Choose a Target</Text>
+                <Text style={{ alignSelf: 'center', fontSize: 15, fontWeight: 'bold' }}>Choose a Target</Text>
               </View>
             )}
           </View>
@@ -180,7 +180,7 @@ const GamePlayScreen = ({ navigation, route }) => {
               //onPress={() => { Alert.alert("Score: " + String(parseInt(lastScore)) + "%") }}
               onPress={() => setModalConfVisible(true)}
             />
-            <Text style={{ alignSelf: 'center', marginTop: 6, fontSize: 15, fontWeight: 'bold' }}>Confirm</Text>
+            <Text style={{ alignSelf: 'center', fontSize: 15, fontWeight: 'bold' }}>Confirm</Text>
           </View>
         </View>
       </View>
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
   levelNumber: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    top: -10,
+    top: 0,
   },
   crosshair: {
     tintColor: 'white',
