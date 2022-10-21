@@ -18,11 +18,21 @@ import { windowWidth } from '@/utils/Dimentions';
 const circlePosision = [
   [null, null],
   ['5%', '70%'],
-  ['40%', '60%'],
-  ['5%', '47%'],
-  ['45%', '33%'],
-  ['7%', '17%'],
+  ['40%', '56%'],
+  ['5%', '43%'],
+  ['45%', '30%'],
+  ['7%', '12%'],
   ['30%', '0%'],
+]
+const levelGifs = [
+  require('../Assets/Images/nurse-woman-relax-stock-gifs.gif'),
+  require('../Assets/Images/nurse-woman-leaned-stock-gifs.gif'),
+  require('../Assets/Images/nurse-woman-playing-guitar-stock-gifs.gif'),
+  require('../Assets/Images/nurse-woman-exercise-stock-gifs.gif'),
+  require('../Assets/Images/nurse-woman-evil-stock-gifs.gif'),
+]
+const levelGifStyles = [
+  {}, { left: '-35%' }, {}, {}, {}
 ]
 
 const LevelsScreen = ({ navigation }) => {
@@ -65,7 +75,7 @@ const LevelsScreen = ({ navigation }) => {
           imageStyle={{ opacity: 0.2 }}
           style={{ flex: 1 }}>
           <View style={{ flex: 1, alignItems: 'center' }}>
-            <Image source={require('../Assets/Images/nurse-woman-exercise-stock-gifs.gif')}
+            <Image source={require('../Assets/Images/nurse-woman-meditation-stock-gifs.gif')}
               style={{ height: windowWidth * 0.8, width: windowWidth * 0.8 }} />
             <TouchableOpacity style={{
               width: 200, height: 200, borderWidth: 6, borderRadius: 100, borderColor: 'rgba(30, 143, 4,0.4)', justifyContent: 'center', alignItems: 'center'
@@ -93,7 +103,7 @@ const LevelsScreen = ({ navigation }) => {
               width: 200, height: 200, borderWidth: 6, borderRadius: 100, borderColor: 'rgba(254, 191, 62,0.7)', justifyContent: 'center', alignItems: 'center'
               , backgroundColor: 'rgba(254, 191, 62,0.5)', marginTop: 50,
             }} onPress={() => navigation.replace('Game')} disabled={true}>
-              <Text style={{ fontSize: 35, color: 'black', textAlign: 'center' }} >You won{'\n'}the game</Text>
+              <Text style={{ fontSize: 35, color: '#fefefe', textAlign: 'center' }} >You won{'\n'}the game</Text>
             </TouchableOpacity>
           </View>
         </ImageBackground>
@@ -115,25 +125,16 @@ const LevelsScreen = ({ navigation }) => {
 };
 
 const GameButton = ({ levelNumber, navigation }) => {
-  if (levelNumber >= 6)
-    return (
-      <View style={styles.container}>
-        <TouchableOpacity style={{
-          width: 200, height: 200, borderWidth: 6, borderRadius: 100, borderColor: 'rgba(143, 25, 4,0.4)', justifyContent: 'center', alignItems: 'center'
-          , backgroundColor: 'rgba(143, 25, 4,0.3)', left: circlePosision[levelNumber][0], top: circlePosision[levelNumber][1]
-        }} onPress={() => navigation.replace('Game')} disabled={true}>
-          <Text style={{ fontSize: 40, color: '#f8f0e3' }} >Finished</Text>
-        </TouchableOpacity>
-      </View>
-    )
 
   return (
     <View style={styles.container}>
       <TouchableOpacity style={{
-        width: 200, height: 200, borderWidth: 6, borderRadius: 100, borderColor: 'rgba(30, 143, 4,0.4)', justifyContent: 'center', alignItems: 'center'
-        , backgroundColor: 'rgba(30, 143, 4,0.3)', left: circlePosision[levelNumber][0], top: circlePosision[levelNumber][1]
+        width: 200, height: 200, borderWidth: 6, borderRadius: 50, borderColor: 'rgba(32, 99, 121,1)', alignItems: 'center'
+        , backgroundColor: 'rgba(54, 164, 201,0.6)', left: circlePosision[levelNumber][0], top: circlePosision[levelNumber][1]
       }} onPress={() => navigation.replace('Game')}>
-        <Text style={{ fontSize: 45, color: '#f8f0e3' }} >Level {levelNumber}</Text>
+        <Text style={{ fontSize: 35, color: 'white' }} >Level {levelNumber}</Text>
+        <Image source={levelGifs[levelNumber - 1]}
+          style={[{ position: 'absolute', height: '90%', width: '100%', bottom: 0 }, levelGifStyles[levelNumber - 1]]} />
       </TouchableOpacity>
     </View>
   )

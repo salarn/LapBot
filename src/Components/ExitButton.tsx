@@ -7,12 +7,9 @@ import { Icon } from 'react-native-elements'
 const ExitButton = (props) => {
   return (
     <View style={styles.container}>
-      <Icon reverse name="home" type="entypo" size={20} color='#ff5f56' onPress={() => {
+      <Icon reverse name="home" type="entypo" size={20} color='#ea685e' onPress={() => {
         props.navigation.replace('RotatePhoneToPortrait')
       }} />
-      <Text style={styles.ExitText}>
-        Home
-      </Text>
     </View>
   )
 }
@@ -20,8 +17,8 @@ const ExitButton = (props) => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: getStatusBarHeight() - 30,
-    left: 25,
+    top: 5,
+    left: 15,
     alignItems: 'center',
   },
   image: {

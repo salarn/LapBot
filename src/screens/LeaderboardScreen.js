@@ -19,6 +19,7 @@ import { BackButton, ExitButton } from '@/Components';
 
 var userToken = null
 var usersFlag = []
+var emojiFlags = require('emoji-flags')
 var usersMedicalGrade = []
 let users8GradesFullName = [null, "Medical students", "Post-graduates year 1", "Post-graduates year 2", "Post-graduates year 3", "Post-graduates year 4", "Post-graduates year 5+", "Clinical fellows", "Attending surgeons"]
 let users8GradesFullServerCode = [null, "Medical+student", "Post-graduate+year+1", "Post-graduate+year+2", "Post-graduate+year+3", "Post-graduate+year+4", "Post-graduate+year+5+", "Clinical+fellow", "Attending+surgeon"]
@@ -48,7 +49,6 @@ const LeaderboardScreen = ({ navigation }) => {
         setCurrentUserLevelNumber(parseInt(value))
       }
     })
-
     return unsubscribe;
   }, [navigation])
   useEffect(() => {
@@ -106,15 +106,14 @@ const LeaderboardScreen = ({ navigation }) => {
       <View style={[styles.container, { justifyContent: 'flex-end' }]}>
         <Image source={require('../Assets/Images/leaderboardPodiumGeneral.png')}
           style={styles.leaderBoardPNG} />
-        <Image source={require('../Assets/Images/leaderboardText2.png')}
-          style={{ width: 300, height: 47, marginBottom: 15 }} />
-        <View style={{ flexDirection: 'row', width: '80%' }}>
-          <Text style={{ position: 'absolute', left: '3%' }}>Rank</Text>
-          <Text style={{ position: 'absolute', left: '27%' }}>Name</Text>
+        <Text style={{ fontFamily: 'GillSans-SemiBold', marginBottom: 10, fontSize: 45, alignSelf: 'center' }}>Leaderboard</Text>
+        <View style={{ flexDirection: 'row', width: '90%' }}>
+          <Text style={{ position: 'absolute', left: '2%' }}>Rank</Text>
+          <Text style={{ position: 'absolute', left: '24%' }}>Name</Text>
           <Text style={{ position: 'absolute', left: '65%' }}>Level</Text>
           <Text style={{ position: 'absolute', left: '82%' }}>Score</Text>
         </View>
-        <View style={{ borderWidth: 1, height: '40%', width: '80%', borderRadius: 16, paddingTop: 10, marginTop: 20 }}>
+        <View style={{ borderWidth: 1, height: '40%', width: '90%', borderRadius: 16, paddingTop: 10, marginTop: 20 }}>
           <ScrollView style={{ flex: 1 }}>
             {firstThreeUsers.map((oneUser, index) =>
               <View style={{ flexDirection: 'row', height: 35 }}>
@@ -122,7 +121,8 @@ const LeaderboardScreen = ({ navigation }) => {
                   <Image source={medalImages[index]} style={{ height: '85%', width: 18 }} />
                 </View>
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon color="#3fb3e6" name="user-md" type="font-awesome" size={25} />
+                  <Text style={{ fontSize: 25 }}>{usersFlag[oneUser[0]] ? emojiFlags.countryCode(usersFlag[oneUser[0]]).emoji : ""}</Text>
+
                 </View>
                 <View style={{ flex: 4, alignItems: 'flex-start', justifyContent: 'center' }}>
                   <Text style={{ marginLeft: 10, paddingRight: 10 }}>{oneUser[0]}</Text>
@@ -141,7 +141,7 @@ const LeaderboardScreen = ({ navigation }) => {
                   <Text style={{ fontSize: 15 }}>{index + 4}.</Text>
                 </View>
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon color="#3fb3e6" name="user-md" type="font-awesome" size={25} />
+                  <Text style={{ fontSize: 25 }}>{usersFlag[oneUser[0]] ? emojiFlags.countryCode(usersFlag[oneUser[0]]).emoji : ""}</Text>
                 </View>
                 <View style={{ flex: 4, alignItems: 'flex-start', justifyContent: 'center' }}>
                   <Text style={{ marginLeft: 10, paddingRight: 10 }}>{oneUser[0]}</Text>
@@ -156,12 +156,12 @@ const LeaderboardScreen = ({ navigation }) => {
             )}
           </ScrollView>
 
-          <View style={{ borderWidth: 1, flexDirection: 'row', height: 50, borderRadius: 15, backgroundColor: "rgba(253, 236, 59,0.5)" }}>
+          <View style={{ borderWidth: 1, flexDirection: 'row', height: 50, borderRadius: 15, backgroundColor: "rgb(126, 185, 208)" }}>
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
               <Text style={{ fontSize: 15 }}>{currentUserRank != null ? currentUserRank + "." : "--"}</Text>
             </View>
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-              <Icon color="#3fb3e6" name="user-md" type="font-awesome" size={25} />
+              <Text style={{ fontSize: 25 }}>{usersFlag[userToken] ? emojiFlags.countryCode(usersFlag[userToken]).emoji : ""}</Text>
             </View>
             <View style={{ flex: 4, alignItems: 'flex-start', justifyContent: 'center' }}>
               <Text style={{ marginLeft: 10, paddingRight: 10 }}>{userToken} (You)</Text>
@@ -175,7 +175,7 @@ const LeaderboardScreen = ({ navigation }) => {
           </View>
 
         </View>
-        <View style={{ height: '10%', width: '95%', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+        <View style={{ height: '10%', width: '90%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           {grades1234.map((gradeNumber) =>
             <TouchableOpacity style={styles.levelButtonContainer} onPress={() => {
               setModalRankList(null)
@@ -189,7 +189,7 @@ const LeaderboardScreen = ({ navigation }) => {
             </TouchableOpacity>
           )}
         </View>
-        <View style={{ height: '10%', width: '95%', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', marginBottom: 10 }}>
+        <View style={{ height: '10%', width: '90%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
           {grades5678.map((gradeNumber) =>
             <TouchableOpacity style={styles.levelButtonContainer} onPress={() => {
               setModalRankList(null)
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   levelButtonContainer: {
     width: '20%',
     height: '70%',
-    backgroundColor: '#7fd19b',
+    backgroundColor: '#fb6a6a',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
   levelButtonText: {
     fontSize: 15,
     //fontWeight: 'bold',
-    color: '#595959',
+    color: 'white',
   }
 })
 
@@ -319,7 +319,7 @@ const MiniRankListReactComponant = (props) => {
               <Image source={medalImages[index]} style={{ height: 35, width: 21 }} />
             </View>
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-              <Icon color="#3fb3e6" name="user-md" type="font-awesome" size={25} />
+              <Text style={{ fontSize: 25 }}>{usersFlag[oneUser[0]] ? emojiFlags.countryCode(usersFlag[oneUser[0]]).emoji : ""}</Text>
             </View>
             <View style={{ flex: 3, alignItems: 'flex-start', justifyContent: 'center' }}>
               <Text style={{ marginLeft: 10 }}>{oneUser[0]}</Text>
@@ -332,7 +332,7 @@ const MiniRankListReactComponant = (props) => {
             </View>
           </View>
         )}
-        <View style={{ borderWidth: 1, flexDirection: 'row', height: '25%', borderRadius: 15, backgroundColor: "rgba(253, 236, 59,0.5)", }}>
+        <View style={{ borderWidth: 1, flexDirection: 'row', height: '25%', borderRadius: 15, backgroundColor: "rgba(126, 185, 208,0.6)", }}>
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
             <Text>{currentUserRank != null ? currentUserRank + "." : "--"}</Text>
           </View>
@@ -546,6 +546,7 @@ const semiProcessingRecordsData = (recordsObjs, setRankList, setCurrentUserScore
 
 const loadUsersMedicalGradesAndFlag = () => {
   let recordsObjs = []
+  usersFlag = []
   fetch(`https://users.encs.concordia.ca/~m_orooz/demographicInfo.txt`, {
     headers: {
       'Cache-Control': 'no-cache'

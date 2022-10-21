@@ -26,7 +26,7 @@ const MainTabScreen = () => {
         component={TutorialScreen}
         options={{
           tabBarLabel: 'Tutorial',
-          tabBarColor: '#ff944d',
+          tabBarColor: '#66cc66',
           tabBarIcon: ({ color }) => (
             <Icon3 name="book" color={color} size={26} />
           ),
@@ -48,7 +48,7 @@ const MainTabScreen = () => {
         component={LeaderboardScreen}
         options={{
           tabBarLabel: 'Leaderboard',
-          tabBarColor: '#379b93',
+          tabBarColor: '#42bdb3',
           tabBarIcon: ({ color }) => (
             <Icon2 name="leaderboard" color={color} size={26} />
           ),

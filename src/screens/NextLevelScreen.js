@@ -7,7 +7,7 @@ import {
   Pressable,
   ImageBackground,
   Image,
-  Alert,
+  ActivityIndicator,
   Modal,
 } from 'react-native';
 import { Icon } from 'react-native-elements'
@@ -38,54 +38,51 @@ const NextLevelScreen = ({ route, navigation }) => {
     loadSemiLeaderboardData(setRankList, setCurrentUserScore, setCurrentUserRank, levelNumber)
   }, [])
 
-  return (
-    <ImageBackground
-      source={require('../Assets/Images/background-gameplay.png')}
-      resizeMode="cover"
-      style={{ flex: 1 }}
-    >
-      <View style={styles.container}>
-        <View style={styles.leftContainer}>
-          <Text style={styles.congratsText}>Congrats on passing level {levelNumber}{'\n'}Your score was {currentUserScore ? currentUserScore.toFixed(0) : "--"}</Text>
-          <View style={{ height: '60%' }}>
-            <Image source={require('../Assets/Images/trophy-onboarding.gif')}
-              style={styles.congratsGif} />
-          </View>
-        </View>
-        <View>
-          <View style={styles.IconsContainer}>
-            <View style={styles.frameIcon}>
-              <Icon reverse color="#972ba1" name="leaderboard" type="MaterialIcons" size={50}
-                onPress={() => {
-
-                  setModalConfVisible(!modalConfVisible)
-                }}
-              />
-              <Text style={{ alignSelf: 'center', marginTop: 6, fontSize: 15, fontWeight: 'bold' }}>Mini LeaderBoard</Text>
-            </View>
-          </View>
-          <TouchableOpacity
-            style={styles.ContinueButtonNext}
-            onPress={() => { navigation.replace('RotatePhoneToPortrait') }}>
-            <Text style={styles.ContinueTextStyle}>Continue</Text>
-          </TouchableOpacity>
+  if (rankList == null) {
+    return (
+      <View style={{ backgroundColor: 'rgba(0,0,0,0.5)', flex: 1 }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
+          <ActivityIndicator size="large" />
         </View>
       </View>
-      <Modal
-        supportedOrientations={['landscape-right']}
-        animationType='slide'
-        transparent={true}
-        visible={modalConfVisible}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <BackButton onPress={() => setModalConfVisible(!modalConfVisible)} />
-            <RankListReactComponant rankList={rankList} currentUserRank={currentUserRank} currentUserScore={currentUserScore} levelNumber={levelNumber} />
+    )
+  }
+
+  return (
+    <View style={{ backgroundColor: 'rgba(0,0,0,1)', flex: 1 }}>
+      <View style={styles.container}>
+        <View style={{ height: '30%', justifyContent: 'center', }}>
+          <Text style={styles.congratsText}>Level {levelNumber} finished</Text>
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={styles.leftContainer}>
+            <View style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center', marginRight: '35%' }}>
+              <RankListReactComponant rankList={rankList} currentUserRank={currentUserRank} currentUserScore={currentUserScore} levelNumber={levelNumber} />
+            </View>
+          </View>
+          <View style={{ justifyContent: 'flex-end', paddingBottom: '6%' }}>
+            <View style={{ alignItems: 'center' }}>
+              <View style={{ backgroundColor: "#28588a", borderRadius: 300, padding: 2 }}>
+                <Icon reverse name="arrow-right" type="fontisto" size={40} color="#5e9cea" reverseColor="#002e52"
+                  onPress={() => navigation.replace('RotatePhoneToPortrait')}
+                />
+              </View>
+              <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Next round</Text>
+            </View>
           </View>
         </View>
-
-      </Modal>
-    </ImageBackground >
+        <View style={styles.animationGif}>
+          <Image source={require('../Assets/Images/nurse-woman-happy-jump-stock-gifs.gif')}
+            rep
+            style={{
+              height: '100%',
+              width: '100%',
+              marginTop: 20,
+            }}
+          />
+        </View>
+      </View>
+    </View >
   )
 
 };
@@ -115,12 +112,9 @@ const RankListReactComponant = (props) => {
       firstThreeUsers.push(rankList[i])
   }
   return (
-    <View style={{ alignItems: 'center', height: '90%', width: '50%' }}>
-      <Image source={require('../Assets/Images/Podium2.png')}
-        style={styles.leaderBoardPNG} />
-      <Image source={miniLeaderboardAddresses[levelNumber - 1]}
-        style={{ width: 210, height: 40, marginBottom: 10 }} />
-      <View style={{ borderWidth: 1, height: '60%', width: '100%', borderRadius: 15, paddingTop: 10 }}>
+    <View style={{ alignItems: 'center', height: '100%', width: '50%' }}>
+      <Text style={{ fontSize: 20, alignSelf: 'center', textAlign: 'center', fontWeight: '600', color: 'rgb(243, 244, 244)', marginTop: -5, marginBottom: 5 }}>Level {levelNumber} leaderboard</Text>
+      <View style={{ borderWidth: 5, height: '70%', width: '100%', borderRadius: 20, paddingTop: 10, borderColor: '#5e9cea', backgroundColor: 'rgb(243, 244, 244)' }}>
         {firstThreeUsers.map((oneUser, index) =>
           <View style={{ flexDirection: 'row', flex: 2 }}>
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
@@ -138,15 +132,15 @@ const RankListReactComponant = (props) => {
           </View>
         )}
         <View style={{ flex: 3, }}>
-          <View style={{ borderWidth: 1, flexDirection: 'row', flex: 1, marginTop: 10, borderRadius: 15, backgroundColor: "rgba(253, 236, 59,0.5)" }}>
+          <View style={{ borderWidth: 1, flexDirection: 'row', flex: 1, marginTop: 10, borderRadius: 15, backgroundColor: "#28588a", borderColor: '#5e9cea' }}>
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
-              <Text>{currentUserRank}.</Text>
+              <Text style={{ color: 'rgb(243, 244, 244)', }}>{currentUserRank}.</Text>
             </View>
             <View style={{ flex: 4, alignItems: 'center', justifyContent: 'center' }}>
-              <Text style={{ marginLeft: 20 }}>{userToken} (You)</Text>
+              <Text style={{ color: 'rgb(243, 244, 244)', marginLeft: 20 }}>{userToken} (You)</Text>
             </View>
             <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
-              <Text style={{ color: "#32815c" }}>{currentUserScore != null ? currentUserScore.toFixed(2) : "0.00"} xp</Text>
+              <Text style={{ color: 'rgb(243, 244, 244)', }}>{currentUserScore != null ? currentUserScore.toFixed(2) : "0.00"} xp</Text>
             </View>
           </View>
         </View>
@@ -237,12 +231,18 @@ const processingRecordsData = (recordsObjs, setRankList, setCurrentUserScore, se
 }
 
 const styles = StyleSheet.create({
+  animationGif: {
+    width: '30%',
+    height: '90%',
+    position: 'absolute',
+    left: '50%'
+  },
   container: {
     flex: 1,
     alignItems: "center",
     //padding: 20,
-    flexDirection: 'row',
-    flexGrow: 20,
+    //flexDirection: 'row',
+    flexGrow: 1,
   },
   leftContainer: {
     width: '70%',
@@ -251,24 +251,17 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   congratsText: {
-    fontSize: 35,
+    fontSize: 45,
     alignSelf: 'center',
     textAlign: 'center',
-    marginTop: 30,
-    //paddingTop: 30,
-    fontWeight: 'bold',
-    color: '#0ca284',
-    lineHeight: 50,
-    height: '40%',
+    fontWeight: '400',
+    color: 'white',
   },
   congratsGif: {
     width: 200,
     height: '80%',
     //marginTop: -20,
     //marginBottom: -10
-  },
-  IconsContainer: {
-    justifyContent: 'space-evenly',
   },
   frameIcon: {
     //flex: 1,

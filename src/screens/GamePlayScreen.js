@@ -98,32 +98,17 @@ const GamePlayScreen = ({ navigation, route }) => {
     })
   }, [])
   return (
-    <ImageBackground
-      source={require('../Assets/Images/background-gameplay.png')}
-      resizeMode="cover"
-      style={{ flex: 1 }}
-    >
+    <View style={{ backgroundColor: 'rgba(0,0,0,1)', flex: 1 }}>
       <View style={styles.container}>
-        <ExitButton navigation={navigation} backLocationString="MainTab" />
-        <View>
-          <View style={styles.levelNumber}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dimgrey' }}>Level   {levelNumber}</Text>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'dimgrey' }}>Round   {roundNumber}</Text>
-          </View>
+        <View style={{ height: '100%' }}>
+          <Text style={{ fontSize: 25, fontWeight: '600', color: 'rgb(243, 244, 244)', textAlign: 'center', marginVertical: 8 }}>Choose where to dissect next</Text>
           <View style={[styles.examContainer, { alignItems: 'center', justifyContent: 'center' }]}>
             {quizVisible ? (
               <View>
-                <View onTouchStart={(e) => {
-                  setLastTouchX(e.nativeEvent.locationX)
-                  setLastTouchY(e.nativeEvent.locationY)
-                }}
-                >
+                <View>
                   <Image source={GameData.rawFrame[levelNumber][RoundsCalculationMod(levelNumber, roundNumber)]}
-                    style={{ height: GameFrameHeight, width: GameFrameWidth, }} />
+                    style={{ height: GameFrameHeight, width: GameFrameWidth, borderRadius: 40 }} />
                 </View>
-                {lastScore == null &&
-                  <Text style={styles.textOnFrame}>Choose a target point by clicking on this image</Text>
-                }
                 <Image source={require('../Assets/Images/crosshair.png')}
                   style={[styles.crosshair,
                   {
@@ -132,15 +117,19 @@ const GamePlayScreen = ({ navigation, route }) => {
                   }]} />
                 <Image source={require('../Assets/Images/scalpel.png')}
                   style={[styles.scalpel, {
-                    top: lastTouchY == null ? 220 + windowWidth * 0.1 / 3 : lastTouchY + windowWidth * 0.1 / 3,
-                    left: lastTouchX == null ? 300 + windowWidth * 0.1 / 3 : lastTouchX + windowWidth * 0.1 / 3
+                    top: lastTouchY == null ? 220 - 40 : lastTouchY - 40,
+                    left: lastTouchX == null ? 300 + 5 : lastTouchX + 5
                   }]} />
-
+                <View style={{ position: 'absolute', left: 0, top: 0, width: GameFrameWidth, height: GameFrameHeight }}
+                  onTouchStart={(e) => {
+                    setLastTouchX(e.nativeEvent.locationX)
+                    setLastTouchY(e.nativeEvent.locationY)
+                  }} />
               </View>
             ) : (
               <View>
                 <Video source={GameData.rawVideo[levelNumber][RoundsCalculationMod(levelNumber, roundNumber)]}
-                  style={{ height: GameFrameHeight, width: GameFrameWidth, }}
+                  style={{ height: GameFrameHeight, width: GameFrameWidth, borderRadius: 40 }}
                   controls={true}
                   muted={true}
                   fullscreenAutorotate={false}
@@ -150,39 +139,59 @@ const GamePlayScreen = ({ navigation, route }) => {
             )}
           </View>
         </View>
-        <View style={styles.IconsContainer}>
-          <View style={styles.gallbladdersContainer}>
-            {arr.map(i => {
-              return <Image key={i} source={i > bingoNumber ?
-                require('../Assets/Images/gallbladder-black.png') :
-                require('../Assets/Images/gallbladder-colorful.png')}
-                style={{ height: 40, width: 40 }} />
-            })
-            }
+        <View style={{ height: '100%', width: 200 }}>
+          <View style={[styles.levelNumber, { marginTop: 8 }]}>
+            <Text style={{ fontSize: 25, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Level {levelNumber}</Text>
+            <Text style={{ fontSize: 25, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Round {roundNumber}</Text>
           </View>
+          <View style={[styles.IconsContainer, { alignItems: 'center', justifyContent: 'center' }]}>
+            <View style={styles.gallbladdersContainer}>
+              {arr.map(i => {
+                return <Image key={i} source={i > bingoNumber ?
+                  require('../Assets/Images/gallbladder-black.png') :
+                  require('../Assets/Images/gallbladder-colorful.png')}
+                  style={(i > bingoNumber) ? { height: 45, width: 45, tintColor: 'white' } : { height: 45, width: 45 }} />
+              })
+              }
+            </View>
 
-          <View style={styles.repeatIcon}>
-            {quizVisible ? (
-              <View>
-                <Icon reverse name="video" type="entypo" size={50} onPress={() => { setQuizVisible(false) }} />
-                <Text style={{ alignSelf: 'center', marginTop: 6, fontSize: 15, fontWeight: 'bold' }}>Play the Video</Text>
+            <View style={styles.repeatIcon}>
+              {quizVisible ? (
+                <View style={{ alignItems: 'center' }}>
+                  <View style={{ backgroundColor: "#ea685e", borderRadius: 300, padding: 2 }}>
+                    <Icon reverse name="video" type="entypo" size={40} color="#edeeee" reverseColor="#ea685e"
+                      onPress={() => { setQuizVisible(false) }} />
+                  </View>
+                  <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Play video</Text>
+                </View>
+              ) : (
+                <View style={{ alignItems: 'center' }}>
+                  <View style={{ backgroundColor: "#ea685e", borderRadius: 300, padding: 2 }}>
+                    <Icon reverse name="hair-cross" type="entypo" size={40} color="#edeeee" reverseColor="#ea685e"
+                      onPress={() => { setQuizVisible(true) }} />
+                  </View>
+                  <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Choose target</Text>
+                </View>
+              )}
+            </View>
+            <View style={styles.doneIcon}>
+              <View style={{ alignItems: 'center' }}>
+                <View style={(!quizVisible || lastScore == null) ?
+                  { backgroundColor: "#002e52", borderRadius: 300, padding: 2 } :
+                  { backgroundColor: "#28588a", borderRadius: 300, padding: 2 }}>
+                  <Icon reverse name="arrow-right" type="fontisto" size={40} color="#5e9cea" reverseColor="#002e52"
+                    disabled={!quizVisible || lastScore == null}
+                    //onPress={() => { Alert.alert("Score: " + String(parseInt(lastScore)) + "%") }}
+                    onPress={() => setModalConfVisible(true)}
+                    disabledStyle={{ backgroundColor: '#636969' }}
+                  />
+                </View>
+                <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Confirm</Text>
               </View>
-            ) : (
-              <View>
-                <Icon reverse name="hair-cross" type="entypo" size={50} onPress={() => { setQuizVisible(true) }} />
-                <Text style={{ alignSelf: 'center', fontSize: 15, fontWeight: 'bold' }}>Choose a Target</Text>
-              </View>
-            )}
-          </View>
-          <View style={styles.doneIcon}>
-            <Icon reverse color="#0ca284" name="check" type="font-awesome" size={50}
-              disabled={!quizVisible || lastScore == null}
-              //onPress={() => { Alert.alert("Score: " + String(parseInt(lastScore)) + "%") }}
-              onPress={() => setModalConfVisible(true)}
-            />
-            <Text style={{ alignSelf: 'center', fontSize: 15, fontWeight: 'bold' }}>Confirm</Text>
+            </View>
           </View>
         </View>
+        <ExitButton navigation={navigation} backLocationString="MainTab" />
       </View>
       <Modal
         supportedOrientations={['landscape-right']}
@@ -205,7 +214,7 @@ const GamePlayScreen = ({ navigation, route }) => {
         </View>
 
       </Modal>
-    </ImageBackground>
+    </View >
   )
 
 };
@@ -261,9 +270,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-evenly",
     alignItems: "center",
-    padding: 20,
+    //padding: 20,
     flexDirection: 'row',
-    flexGrow: 20,
+    flexGrow: 1,
     //backgroundColor: "#F5FCFF",
   },
   welcome: {
@@ -286,8 +295,7 @@ const styles = StyleSheet.create({
   },
   levelNumber: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    top: 0,
+    justifyContent: 'space-between',
   },
   crosshair: {
     tintColor: 'white',
@@ -296,25 +304,18 @@ const styles = StyleSheet.create({
     width: windowWidth * 0.1,
   },
   scalpel: {
-    tintColor: 'white',
     position: 'absolute',
-    height: windowWidth * 0.15,
-    width: windowWidth * 0.15,
+    height: windowWidth * 0.5,
+    width: windowWidth * 0.5,
   },
   IconsContainer: {
-    height: '100%',
-    width: '20%',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 40,
-    marginRight: -30,
+    height: OverFrameHeight,
   },
   repeatIcon: {
-    flex: 1,
+    marginTop: 10,
   },
   doneIcon: {
-    flex: 1,
+    marginTop: 5,
   },
   textOnFrame: {
     position: 'absolute',
@@ -329,15 +330,7 @@ const styles = StyleSheet.create({
   },
   gallbladdersContainer: {
     flexDirection: 'row',
-    borderLeftColor: '#fcf05a',
-    borderBottomColor: '#fcf05a',
-    borderTopColor: '#56b56a',
-    borderRightColor: '#56b56a',
-    borderWidth: 3,
-    borderRadius: 10,
-    padding: 5,
-    marginTop: -20,
-    marginBottom: 10
+    marginTop: 0,
   },
   ///////////// Modal styles
   centeredView: {

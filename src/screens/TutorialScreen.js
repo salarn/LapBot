@@ -12,19 +12,15 @@ import FormButton from '../Components/FormButton';
 
 const TutorialScreen = ({ navigation }) => {
   return (
-    <ImageBackground
-      source={require('../Assets/Images/backGroundTutorial.png')}
-      resizeMode="cover"
-      style={{ flex: 1 }}
-    >
+    <View style={{ flex: 1, backgroundColor: 'rgb(243, 244, 244)' }}>
       <View style={styles.container}>
-        <Image style={{ marginTop: 20 }} source={require('../Assets/Images/tutorialTextImage.png')} />
+        <Text style={{ fontFamily: 'GillSans-SemiBold', marginTop: 20, fontSize: 45, alignSelf: 'center' }}>Tutorial</Text>
         <ScrollView style={{ paddingTop: 0 }}>
           <Text style={styles.text}>*The objective of this game is to identify where it is safe to dissect during a laparoscopic cholecystectomy.</Text>
           <Image source={require('../Assets/Images/TutorialImage1.png')} style={{ width: '100%', height: 240, marginTop: 20 }} />
           <Text style={styles.text}>*You will be provided with a sample scenario - remember you can watch a video for that scenario before submitting your answer.</Text>
           <Image source={require('../Assets/Images/TutorialImage2.png')} style={{ width: 100, height: 120, marginTop: 20, alignSelf: 'center' }} />
-          <Video source={require('../Assets/Videos/1.0-video-clean.mp4')}
+          <Video source={require('../Assets/QuestionBank/Level2-raw-video/2.mp4')}
             style={{ width: '100%', height: 240, marginTop: 20 }} controls={true}
             muted={true}
             fullscreenAutorotate={false} />
@@ -34,7 +30,7 @@ const TutorialScreen = ({ navigation }) => {
           <Image source={require('../Assets/Images/TutorialImage4.png')} style={{ width: 100, height: 120, marginTop: 20, alignSelf: 'center' }} />
           <Text style={styles.text}>*You will get an accuracy score to see how you did. You can click on either of these buttons for feedback.</Text>
           <Image source={require('../Assets/Images/TutorialImage6.png')} style={{ width: 150, height: 120, marginTop: 20, alignSelf: 'center' }} />
-          <Image source={require('../Assets/GameData/1.0_image_scaled_raw_heatmap.png')}
+          <Image source={require('../Assets/QuestionBank/Level2-heatmap-frame/2.png')}
             style={{ width: '100%', height: 240, marginTop: 20 }}
           />
           <Text style={styles.text}>*You need to get 5 consecutive correct responses to pass each level.</Text>
@@ -43,7 +39,7 @@ const TutorialScreen = ({ navigation }) => {
           <Text style={[styles.text, { marginBottom: 50 }]}>Good Luck!</Text>
         </ScrollView>
       </View>
-    </ImageBackground>
+    </View>
   );
 };
 
