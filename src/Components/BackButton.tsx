@@ -19,7 +19,7 @@ export default function BackButton(props) {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: getStatusBarHeight() - 10,
+    top: 20,
     left: 10,
   },
   image: {

@@ -158,34 +158,26 @@ const GamePlayScreen = ({ navigation, route }) => {
             <View style={styles.repeatIcon}>
               {quizVisible ? (
                 <View style={{ alignItems: 'center' }}>
-                  <View style={{ backgroundColor: "#ea685e", borderRadius: 300, padding: 2 }}>
-                    <Icon reverse name="video" type="entypo" size={40} color="#edeeee" reverseColor="#ea685e"
-                      onPress={() => { setQuizVisible(false) }} />
-                  </View>
-                  <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Play video</Text>
+                  <Icon reverse name="video" type="entypo" size={45} color="#edeeee" reverseColor="#ea685e"
+                    onPress={() => { setQuizVisible(false) }} />
+                  <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Video</Text>
                 </View>
               ) : (
                 <View style={{ alignItems: 'center' }}>
-                  <View style={{ backgroundColor: "#ea685e", borderRadius: 300, padding: 2 }}>
-                    <Icon reverse name="hair-cross" type="entypo" size={40} color="#edeeee" reverseColor="#ea685e"
-                      onPress={() => { setQuizVisible(true) }} />
-                  </View>
-                  <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Choose target</Text>
+                  <Icon reverse name="hair-cross" type="entypo" size={45} color="#edeeee" reverseColor="#ea685e"
+                    onPress={() => { setQuizVisible(true) }} />
+                  <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Target</Text>
                 </View>
               )}
             </View>
             <View style={styles.doneIcon}>
               <View style={{ alignItems: 'center' }}>
-                <View style={(!quizVisible || lastScore == null) ?
-                  { backgroundColor: "#002e52", borderRadius: 300, padding: 2 } :
-                  { backgroundColor: "#28588a", borderRadius: 300, padding: 2 }}>
-                  <Icon reverse name="arrow-right" type="fontisto" size={40} color="#5e9cea" reverseColor="#002e52"
-                    disabled={!quizVisible || lastScore == null}
-                    //onPress={() => { Alert.alert("Score: " + String(parseInt(lastScore)) + "%") }}
-                    onPress={() => setModalConfVisible(true)}
-                    disabledStyle={{ backgroundColor: '#636969' }}
-                  />
-                </View>
+                <Icon reverse name="check" type="font-awesome" size={45} color="#5e9cea" reverseColor="#002e52"
+                  disabled={!quizVisible || lastScore == null}
+                  //onPress={() => { Alert.alert("Score: " + String(parseInt(lastScore)) + "%") }}
+                  onPress={() => setModalConfVisible(true)}
+                  disabledStyle={{ backgroundColor: '#636969' }}
+                />
                 <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Confirm</Text>
               </View>
             </View>

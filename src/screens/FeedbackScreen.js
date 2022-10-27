@@ -67,7 +67,7 @@ const GamePlayScreen = ({ route, navigation }) => {
             </View>
           )}
         </View>
-        <View style={styles.animationGif}>
+        <View style={lastScore >= roundPassLimit ? styles.animationGifHappy : styles.animationGifSad}>
           <Image source={lastScore >= roundPassLimit ? require('../Assets/Images/nurse-woman-cheering-stock-gifs.gif') : require('../Assets/Images/nurse-woman-crying-stock-gifs.gif')}
             rep
             style={{
@@ -95,30 +95,24 @@ const GamePlayScreen = ({ route, navigation }) => {
             <View style={{ marginTop: 10, }}>
               {AIFrameVisible ? (
                 <View style={{ alignItems: 'center' }}>
-                  <View style={{ backgroundColor: "#ea685e", borderRadius: 300, padding: 2 }}>
-                    <Icon reverse name="video" type="entypo" size={40} color="#edeeee" reverseColor="#ea685e"
-                      onPress={() => { setAIFrameVisible(false) }} />
-                  </View>
-                  <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Play video</Text>
+                  <Icon reverse name="video" type="entypo" size={45} color="#edeeee" reverseColor="#ea685e"
+                    onPress={() => { setAIFrameVisible(false) }} />
+                  <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Feedback</Text>
                 </View>
               ) : (
                 <View style={{ alignItems: 'center' }}>
-                  <View style={{ backgroundColor: "#ea685e", borderRadius: 300, padding: 2 }}>
-                    <Icon reverse name="image" type="entypo" size={40} color="#edeeee" reverseColor="#ea685e"
-                      onPress={() => { setAIFrameVisible(true) }} />
-                  </View>
-                  <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Result frame</Text>
+                  <Icon reverse name="image" type="entypo" size={45} color="#edeeee" reverseColor="#ea685e"
+                    onPress={() => { setAIFrameVisible(true) }} />
+                  <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Result</Text>
                 </View>
               )}
             </View>
             <View style={{ marginTop: 0, }}>
               <View style={{ alignItems: 'center' }}>
-                <View style={{ backgroundColor: "#28588a", borderRadius: 300, padding: 2 }}>
-                  <Icon reverse name="arrow-right" type="fontisto" size={40} color="#5e9cea" reverseColor="#002e52"
-                    onPress={() => GoToNextRound(navigation, bingoNumber, levelNumber, roundNumber)}
-                  />
-                </View>
-                <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Next round</Text>
+                <Icon reverse name="arrow-right" type="fontisto" size={45} color="#5e9cea" reverseColor="#002e52"
+                  onPress={() => GoToNextRound(navigation, bingoNumber, levelNumber, roundNumber)}
+                />
+                <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Next</Text>
               </View>
             </View>
           </View>
@@ -236,11 +230,19 @@ const styles = StyleSheet.create({
     marginTop: '30%',
     alignSelf: 'center',
   },
-  animationGif: {
-    width: '30%',
+  animationGifSad: {
+    width: '25%',
+    height: '75%',
+    position: 'absolute',
+    left: '57%',
+    bottom: '7%',
+  },
+  animationGifHappy: {
+    width: '25%',
     height: '90%',
     position: 'absolute',
-    left: '54%'
+    left: '57%',
+    bottom: '0.5%',
   },
   crosshair: {
     tintColor: 'silver',

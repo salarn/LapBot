@@ -49,7 +49,7 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <View style={styles.wrap}>
           <Text style={styles.welcome}>
-            How confident are you with your decesion?
+            How confident are you with your decision?
           </Text>
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.confidentTextLeft}>Not Confident</Text>

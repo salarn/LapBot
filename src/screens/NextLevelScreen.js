@@ -21,6 +21,7 @@ import EmojiFeedback from '@/helper/EmojiFeedback'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import FormButton from '@/Components/FormButton';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Rating, AirbnbRating } from 'react-native-ratings'
 
 var userToken = null
 
@@ -30,6 +31,9 @@ const NextLevelScreen = ({ route, navigation }) => {
   const [rankList, setRankList] = useState(null)
   const [currentUserScore, setCurrentUserScore] = useState(null)
   const [currentUserRank, setCurrentUserRank] = useState(null)
+  const [firstFeedbackStar, setFirstFeedbackStar] = useState(3)
+  const [secondFeedbackStar, setSecondFeedbackStar] = useState(3)
+  const [thirdFeedbackStar, setThirdFeedbackStar] = useState(3)
 
   useEffect(() => {
     AsyncStorage.getItem('userToken').then((value) => {
@@ -51,8 +55,14 @@ const NextLevelScreen = ({ route, navigation }) => {
   return (
     <View style={{ backgroundColor: 'rgba(0,0,0,1)', flex: 1 }}>
       <View style={styles.container}>
-        <View style={{ height: '30%', justifyContent: 'center', }}>
-          <Text style={styles.congratsText}>Level {levelNumber} finished</Text>
+        <View style={{ height: '30%', justifyContent: 'center' }}>
+
+          <Text style={[styles.congratsText, {
+            shadowColor: '#55bf99',
+            shadowOffset: { width: 4, height: 4 },
+            shadowOpacity: 1,
+            shadowRadius: 4,
+          }]}>Level {levelNumber} completed</Text>
         </View>
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <View style={styles.leftContainer}>
@@ -62,12 +72,16 @@ const NextLevelScreen = ({ route, navigation }) => {
           </View>
           <View style={{ justifyContent: 'flex-end', paddingBottom: '6%' }}>
             <View style={{ alignItems: 'center' }}>
-              <View style={{ backgroundColor: "#28588a", borderRadius: 300, padding: 2 }}>
-                <Icon reverse name="arrow-right" type="fontisto" size={40} color="#5e9cea" reverseColor="#002e52"
-                  onPress={() => navigation.replace('RotatePhoneToPortrait')}
-                />
-              </View>
-              <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Next round</Text>
+              <Icon reverse name="arrow-right" type="fontisto" size={45} color="#5e9cea" reverseColor="#002e52"
+                onPress={() => {
+                  if (levelNumber == 2)
+                    setModalConfVisible(!modalConfVisible)
+                  else
+                    navigation.replace('RotatePhoneToPortrait')
+                }}
+              //onPress={() => setModalConfVisible(!modalConfVisible)}
+              />
+              <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Next level</Text>
             </View>
           </View>
         </View>
@@ -82,10 +96,102 @@ const NextLevelScreen = ({ route, navigation }) => {
           />
         </View>
       </View>
+      <Modal
+        supportedOrientations={['landscape-right']}
+        animationType='slide'
+        transparent={true}
+        visible={modalConfVisible}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <BackButton onPress={() => setModalConfVisible(!modalConfVisible)} />
+            <Text style={{ fontSize: 35, color: '#525b60', marginBottom: 20 }}>Quick survey</Text>
+            <View style={{ flexDirection: 'row', marginBottom: 10, alignItems: 'center' }}>
+              <View style={{ width: '70%' }}>
+                <Text style={{ fontSize: 22, color: '#525b60', paddingBottom: 20 }}>LapBot is a fun way to learn about safe cholescystectomy:</Text>
+              </View>
+              <View style={{ width: '20%', bottom: '3%' }}>
+                <AirbnbRating
+                  count={5}
+                  reviews={[]}
+                  defaultRating={3}
+                  onFinishRating={(rate) => setFirstFeedbackStar(rate)}
+                  size={25}
+                />
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', marginBottom: 10, alignItems: 'center' }}>
+              <View style={{ width: '70%' }}>
+                <Text style={{ fontSize: 22, color: '#525b60', paddingBottom: 20 }}>The feedbacks (videos/images) are helpful for learning:</Text>
+              </View>
+              <View style={{ width: '20%', bottom: '3%' }}>
+                <AirbnbRating
+                  count={5}
+                  reviews={[]}
+                  defaultRating={3}
+                  onFinishRating={(rate) => setSecondFeedbackStar(rate)}
+                  size={25}
+                />
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ width: '70%' }}>
+                <Text style={{ fontSize: 22, color: '#525b60', paddingBottom: 20 }}>Game elements (scores, leaderboards, consecutive gallbladders, etc) encourage me to play more:</Text>
+              </View>
+              <View style={{ width: '20%', bottom: '3%' }}>
+                <AirbnbRating
+                  count={5}
+                  reviews={[]}
+                  defaultRating={3}
+                  onFinishRating={(rate) => setThirdFeedbackStar(rate)}
+                  size={25}
+                />
+              </View>
+            </View>
+            <TouchableOpacity
+              style={styles.buttonNext}
+              onPress={() => {
+                submitFeedbackDataToServer(firstFeedbackStar, secondFeedbackStar, thirdFeedbackStar)
+                setModalConfVisible(!modalConfVisible)
+                sleep(500).then(() => {
+                  navigation.replace('RotatePhoneToPortrait')
+                })
+              }}
+            >
+              <Text style={styles.modalButtonTextStyle}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View >
   )
 
 };
+function sleep(time) {
+  return new Promise((resolve) => setTimeout(resolve, time)
+  )
+}
+
+const submitFeedbackDataToServer = (firstFeedbackStar, secondFeedbackStar, thirdFeedbackStar) => {
+  var formdata = new FormData();
+  var responseStatus = 0
+  formdata.append("nickname", userToken)
+  formdata.append("firstFeedbackStar", firstFeedbackStar)
+  formdata.append("secondFeedbackStar", secondFeedbackStar)
+  formdata.append("thirdFeedbackStar", thirdFeedbackStar)
+  const requestOptions = {
+    method: 'POST',
+    body: formdata,
+    redirect: 'follow'
+  };
+  fetch('https://users.encs.concordia.ca/~m_orooz/survey.php', requestOptions)
+    .then(response => {
+      responseStatus = response.status
+    })
+    .catch(error => {
+      console.error('survey records sending to server get ERROR. Http server request Error: ', error.toString());
+    });
+}
 
 const RankListReactComponant = (props) => {
   const { rankList, currentUserRank, currentUserScore, levelNumber } = props
@@ -113,7 +219,7 @@ const RankListReactComponant = (props) => {
   }
   return (
     <View style={{ alignItems: 'center', height: '100%', width: '50%' }}>
-      <Text style={{ fontSize: 20, alignSelf: 'center', textAlign: 'center', fontWeight: '600', color: 'rgb(243, 244, 244)', marginTop: -5, marginBottom: 5 }}>Level {levelNumber} leaderboard</Text>
+      <Text style={{ fontSize: 20, alignSelf: 'center', textAlign: 'center', fontWeight: '600', color: 'rgb(243, 244, 244)', marginTop: -5, marginBottom: 5 }}>Leaderboard</Text>
       <View style={{ borderWidth: 5, height: '70%', width: '100%', borderRadius: 20, paddingTop: 10, borderColor: '#5e9cea', backgroundColor: 'rgb(243, 244, 244)' }}>
         {firstThreeUsers.map((oneUser, index) =>
           <View style={{ flexDirection: 'row', flex: 2 }}>
@@ -289,11 +395,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(215, 237, 244,0.7)',
   },
   modalView: {
-    flexDirection: 'row',
+    //flexDirection: 'row',
     backgroundColor: "white",
     borderRadius: 20,
     padding: 10,
-    paddingHorizontal: 70,
+    //paddingHorizontal: 70,
+    paddingLeft: 30,
+    paddingRight: 0,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -302,7 +410,19 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+  },
+  modalButtonTextStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 18,
+  },
+  buttonNext: {
+    marginTop: 0,
+    borderRadius: 20,
+    padding: 15,
+    paddingHorizontal: 30,
+    backgroundColor: "#5e9cea",
   },
   leaderBoardPNG: {
     width: 150,

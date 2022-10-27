@@ -68,7 +68,8 @@ const GameScreen = ({ navigation }) => {
         options={{ header: () => null }} />
       <GameStack.Screen name='NextLevel'
         component={NextLevelScreen}
-        options={{ header: () => null }} />
+        options={{ header: () => null }}
+        initialParams={{ levelNumber: levelNumber }} />
     </GameStack.Navigator>
   );
 };
