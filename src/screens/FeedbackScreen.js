@@ -29,9 +29,10 @@ const roundPassLimit = 50
 const arr = [1, 2, 3, 4, 5]
 
 const GamePlayScreen = ({ route, navigation }) => {
-  const { lastScore, lastTouchX, lastTouchY, levelNumber, roundNumber, GameFrameWidth, GameFrameHeight } = route.params
+  const { lastScore, lastTouchX, lastTouchY, levelNumber, roundNumber, GameFrameWidth, GameFrameHeight, userToken } = route.params
   const [AIFrameVisible, setAIFrameVisible] = useState(true)
   const [bingoNumber, setBingoNumber] = useState(null)
+  const [clickedOnVideo, setClickedOnVideo] = useState(false)
 
   useEffect(() => {
     AsyncStorage.getItem('bingoNumber').then((value) => {
@@ -96,7 +97,13 @@ const GamePlayScreen = ({ route, navigation }) => {
               {AIFrameVisible ? (
                 <View style={{ alignItems: 'center' }}>
                   <Icon reverse name="video" type="entypo" size={45} color="#edeeee" reverseColor="#ea685e"
-                    onPress={() => { setAIFrameVisible(false) }} />
+                    onPress={() => {
+                      setAIFrameVisible(false)
+                      if (clickedOnVideo == false) {
+                        setClickedOnVideo(true)
+                        sendVideoClickFeedbackToServer(levelNumber, roundNumber, bingoNumber, lastScore, userToken)
+                      }
+                    }} />
                   <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Feedback</Text>
                 </View>
               ) : (
@@ -122,6 +129,29 @@ const GamePlayScreen = ({ route, navigation }) => {
   )
 
 };
+
+const sendVideoClickFeedbackToServer = (levelNumber, roundNumber, bingoNumber, lastScore, userToken) => {
+  var formdata = new FormData();
+  var responseStatus = 0
+  formdata.append("nickname", userToken)
+  formdata.append("screen", "feedback")
+  formdata.append("lastScore", lastScore)
+  formdata.append("levelNumber", levelNumber)
+  formdata.append("roundNumber", roundNumber)
+  formdata.append("bingoNumber", bingoNumber)
+  const requestOptions = {
+    method: 'POST',
+    body: formdata,
+    redirect: 'follow'
+  };
+  fetch('https://users.encs.concordia.ca/~m_orooz/videoFeedback.php', requestOptions)
+    .then(response => {
+      responseStatus = response.status
+    })
+    .catch(error => {
+      console.error('video click feedback sending to server ERROR. Http server request Error: ', error.toString());
+    });
+}
 
 const GoToNextRound = (navigation, bingoNumber, levelNumber, roundNumber) => {
   //Going to next level

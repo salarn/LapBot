@@ -50,6 +50,7 @@ const GamePlayScreen = ({ navigation, route }) => {
   const [timerCount, setTimerCount] = useState(0)
   const [timerStarted, setTimerStarted] = useState(false)
   const { levelNumber, roundNumber } = route.params
+  const [clickedOnVideo, setClickedOnVideo] = useState(false)
 
 
   let temp = Image.resolveAssetSource(GameData.heatmapFrame[levelNumber][RoundsCalculationMod(levelNumber, roundNumber)])
@@ -159,7 +160,13 @@ const GamePlayScreen = ({ navigation, route }) => {
               {quizVisible ? (
                 <View style={{ alignItems: 'center' }}>
                   <Icon reverse name="video" type="entypo" size={45} color="#edeeee" reverseColor="#ea685e"
-                    onPress={() => { setQuizVisible(false) }} />
+                    onPress={() => {
+                      setQuizVisible(false)
+                      if (clickedOnVideo == false) {
+                        setClickedOnVideo(true)
+                        sendVideoClickFeedbackToServer(levelNumber, roundNumber, bingoNumber)
+                      }
+                    }} />
                   <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Video</Text>
                 </View>
               ) : (
@@ -210,6 +217,28 @@ const GamePlayScreen = ({ navigation, route }) => {
   )
 
 };
+const sendVideoClickFeedbackToServer = (levelNumber, roundNumber, bingoNumber) => {
+  var formdata = new FormData();
+  var responseStatus = 0
+  formdata.append("nickname", userToken)
+  formdata.append("screen", "game")
+  formdata.append("lastScore", 0)
+  formdata.append("levelNumber", levelNumber)
+  formdata.append("roundNumber", roundNumber)
+  formdata.append("bingoNumber", bingoNumber)
+  const requestOptions = {
+    method: 'POST',
+    body: formdata,
+    redirect: 'follow'
+  };
+  fetch('https://users.encs.concordia.ca/~m_orooz/videoFeedback.php', requestOptions)
+    .then(response => {
+      responseStatus = response.status
+    })
+    .catch(error => {
+      console.error('video click feedback sending to server ERROR. Http server request Error: ', error.toString());
+    });
+}
 
 // FeedBack Screen & Go to next Round
 const GoToFeedbackScreen = (navigation, lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber, timerCount) => {
@@ -229,7 +258,7 @@ const GoToFeedbackScreen = (navigation, lastScore, lastTouchX, lastTouchY, confi
   // Send the record to server
   sendRecordToServer(lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber, timerCount)
 
-  navigation.replace('Feedback', { lastScore, lastTouchX, lastTouchY, levelNumber, roundNumber, GameFrameWidth, GameFrameHeight })
+  navigation.replace('Feedback', { lastScore, lastTouchX, lastTouchY, levelNumber, roundNumber, GameFrameWidth, GameFrameHeight, userToken })
 }
 const sendRecordToServer = (lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber, timerCount) => {
   var formdata = new FormData();

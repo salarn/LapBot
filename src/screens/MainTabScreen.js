@@ -26,7 +26,7 @@ const MainTabScreen = () => {
         component={TutorialScreen}
         options={{
           tabBarLabel: 'Tutorial',
-          tabBarColor: '#66cc66',
+          tabBarColor: '#e06c87',
           tabBarIcon: ({ color }) => (
             <Icon3 name="book" color={color} size={26} />
           ),
