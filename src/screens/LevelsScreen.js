@@ -37,8 +37,30 @@ const levelGifStyles = [
 
 const LevelsScreen = ({ navigation }) => {
 
+  // For rendering the level screen Gif to removing lags
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', (e) => {
+      AsyncStorage.setItem('TabOpen', 'LevelScreen')
+    });
+    return unsubscribe;
+  }, [navigation]);
+  useEffect(() => {
+    var timer = setInterval(() => {
+      AsyncStorage.getItem('TabOpen').then((value) => {
+        if (value == 'LevelScreen')
+          setTabCurrent(true)
+        else
+          setTabCurrent(false)
+      })
+    }, 500)
+    return () => {
+      clearInterval(timer)
+    }
+  })
+
   const [userToken, setUserToken] = useState(null)
   const [levelNumber, setLevelNumber] = useState(null)
+  const [tabCurrent, setTabCurrent] = useState(true)
 
   useEffect(() => {
     AsyncStorage.getItem('userToken').then((value) => {
@@ -51,7 +73,9 @@ const LevelsScreen = ({ navigation }) => {
         setLevelNumber(parseInt(value))
       }
     })
-  })
+    AsyncStorage.setItem('TabOpen', 'LevelScreen')
+  }, [])
+
   if (userToken == null || levelNumber == null) {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: '#7ec5dc' }}>
@@ -103,7 +127,7 @@ const LevelsScreen = ({ navigation }) => {
               width: 200, height: 200, borderWidth: 6, borderRadius: 100, borderColor: 'rgba(254, 191, 62,0.7)', justifyContent: 'center', alignItems: 'center'
               , backgroundColor: 'rgba(254, 191, 62,0.5)', marginTop: 50,
             }} onPress={() => navigation.replace('Game')} disabled={true}>
-              <Text style={{ fontSize: 35, color: '#fefefe', textAlign: 'center' }} >You won{'\n'}the game</Text>
+              <Text style={{ fontSize: 35, color: '#fefefe', textAlign: 'center' }} >You Win!</Text>
             </TouchableOpacity>
           </View>
         </ImageBackground>
@@ -118,13 +142,13 @@ const LevelsScreen = ({ navigation }) => {
         resizeMode="stretch"
         style={{ flex: 1 }}
       >
-        <GameButton levelNumber={levelNumber} navigation={navigation} />
+        <GameButton levelNumber={levelNumber} navigation={navigation} tabCurrent={tabCurrent} />
       </ImageBackground>
     </SafeAreaView>
   );
 };
 
-const GameButton = ({ levelNumber, navigation }) => {
+const GameButton = ({ levelNumber, navigation, tabCurrent }) => {
 
   return (
     <View style={styles.container}>
@@ -133,8 +157,9 @@ const GameButton = ({ levelNumber, navigation }) => {
         , backgroundColor: 'rgba(54, 164, 201,0.6)', left: circlePosision[levelNumber][0], top: circlePosision[levelNumber][1]
       }} onPress={() => navigation.replace('Game')}>
         <Text style={{ fontSize: 35, color: 'white' }} >Level {levelNumber}</Text>
-        <Image source={levelGifs[levelNumber - 1]}
+        {tabCurrent && <Image source={levelGifs[levelNumber - 1]}
           style={[{ position: 'absolute', height: '90%', width: '100%', bottom: 0 }, levelGifStyles[levelNumber - 1]]} />
+        }
       </TouchableOpacity>
     </View>
   )

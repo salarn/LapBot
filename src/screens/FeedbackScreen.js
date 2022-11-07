@@ -110,7 +110,7 @@ const GamePlayScreen = ({ route, navigation }) => {
                 <View style={{ alignItems: 'center' }}>
                   <Icon reverse name="image" type="entypo" size={45} color="#edeeee" reverseColor="#ea685e"
                     onPress={() => { setAIFrameVisible(true) }} />
-                  <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Result</Text>
+                  <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: '600', color: 'rgb(243, 244, 244)' }}>Feedback</Text>
                 </View>
               )}
             </View>

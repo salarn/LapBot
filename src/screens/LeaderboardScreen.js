@@ -25,6 +25,14 @@ let users8GradesFullName = [null, "Medical students", "Post-graduates year 1", "
 let users8GradesFullServerCode = [null, "Medical+student", "Post-graduate+year+1", "Post-graduate+year+2", "Post-graduate+year+3", "Post-graduate+year+4", "Post-graduate+year+5+", "Clinical+fellow", "Attending+surgeon"]
 
 const LeaderboardScreen = ({ navigation }) => {
+  // For rendering the level screen Gif to removing lags
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', (e) => {
+      AsyncStorage.setItem('TabOpen', 'LeaderboardScreen')
+    });
+    return unsubscribe;
+  }, [navigation]);
+
   const [rankList, setRankList] = useState(null)
   const [currentUserScore, setCurrentUserScore] = useState(null)
   const [currentUserRank, setCurrentUserRank] = useState(null)
@@ -75,7 +83,7 @@ const LeaderboardScreen = ({ navigation }) => {
 
   let users8GradesName = [null, "Students", "PGY 1", "PGY 2", "PGY 3", "PGY 4", "PGY 5+", "Fellow", "Surgeon"]
   let firstThreeUsers = []
-  let forthToTenthUsers = []
+  let forthToTwentyUsers = []
   let grades1234 = [1, 2, 3, 4]
   let grades5678 = [5, 6, 7, 8]
   let medalImages = [
@@ -90,11 +98,11 @@ const LeaderboardScreen = ({ navigation }) => {
     else
       firstThreeUsers.push(rankList[i])
   }
-  for (let i = 3; i < 10; i++) {
+  for (let i = 3; i < 20; i++) {
     if (rankList.length <= i)
-      forthToTenthUsers.push(["-----", 0.00])
+      forthToTwentyUsers.push(["-----", 0.00])
     else
-      forthToTenthUsers.push(rankList[i])
+      forthToTwentyUsers.push(rankList[i])
   }
 
   return (
@@ -135,7 +143,7 @@ const LeaderboardScreen = ({ navigation }) => {
                 </View>
               </View>
             )}
-            {forthToTenthUsers.map((oneUser, index) =>
+            {forthToTwentyUsers.map((oneUser, index) =>
               <View style={{ flexDirection: 'row', height: 35 }}>
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
                   <Text style={{ fontSize: 15 }}>{index + 4}.</Text>
