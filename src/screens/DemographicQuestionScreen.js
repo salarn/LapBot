@@ -27,7 +27,7 @@ const DemographicQuestionScreen = ({ navigation }) => {
   const [visible, setVisible] = useState(false)
   var userToken = null
 
-  const WhatAreyouOption = ["Medical student", "Post-graduate year 1", "Post-graduate year 2", "Post-graduate year 3", "Post-graduate year 4", "Post-graduate year 5+", "Clinical fellow", "Attending surgeon"]
+  const WhatAreyouOption = ["Medical student", "Post-graduate year 1", "Post-graduate year 2", "Post-graduate year 3", "Post-graduate year 4", "Post-graduate year 5+", "Clinical fellow", "Attending surgeon", "Other"]
   const hoursOptions = ["0", "2", "5", "10", "More than 10"]
   const surgeryOptions = ["0", "1-50", "51-100", "101-250", "251-500", "501-1000", ">1000"]
 
