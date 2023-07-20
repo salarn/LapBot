@@ -1,8 +1,9 @@
-import React, { useRef } from 'react'
-import { View, Text, Image, TouchableOpacity, StyleSheet, ImageBackground, ScrollView, BackHandler } from 'react-native'
+import React, { useRef, useState } from 'react'
+import { View, Text, Image, TouchableOpacity, StyleSheet, ImageBackground, ScrollView, BackHandler, Linking } from 'react-native'
 import FormButton from '../Components/FormButton';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { windowHeight, windowWidth } from '../utils/Dimentions';
+import CheckBox from '@react-native-community/checkbox';
 
 import Onboarding from 'react-native-onboarding-swiper'
 
@@ -53,6 +54,8 @@ const Done = ({ ...props }) => (
 
 const OnboardingScreen = ({ navigation }) => {
     const onboardingRef = useRef(null);
+    const [toggleCheckBox, setToggleCheckBox] = useState(false)
+
     return (
         <ImageBackground
             source={require('../Assets/Images/background-splashScreen.png')}
@@ -108,8 +111,8 @@ const OnboardingScreen = ({ navigation }) => {
                         image: <Image source={require('../Assets/Images/consent.png')}
                             style={styles.forthPageGIF} />,
                         backgroundColor: 'rgba(255, 255, 255, 1.0)',
-                        title: 'Study Consent',
-                        subtitle: consentDetailButton(navigation, onboardingRef),
+                        title: 'Terms of service',
+                        subtitle: consentDetailButton2(navigation, toggleCheckBox, setToggleCheckBox),
                         titleStyles: { fontFamily: 'GillSans-SemiBold' },
                         subTitleStyles: { fontFamily: 'GillSans', fontSize: 20 }
                     },
@@ -118,31 +121,109 @@ const OnboardingScreen = ({ navigation }) => {
         </ImageBackground>
     );
 };
-const consentDetailButton = (navigation, onboardingRef) => {
+
+const consentDetailButton2 = (navigation, toggleCheckBox, setToggleCheckBox) => {
     return (
         <ScrollView>
-            <View style={{ alignItems: 'baseline', marginLeft: 20, marginRight: 20 }}>
+            <View style={{ alignItems: 'baseline', marginLeft: 20, marginRight: 20, marginBottom: 150 }}>
                 <Text style={styles.tcP}>
-                    This game collects and uses data from the embedded questionnaires and game to enable
-                    core gameplay (e.g. saving your progress and score) and to answer research questions
-                    about the best way to display medical and surgical data. To help support our research,
-                    we ask for your consent to collect this in-app data.
+                    The data (including images and videos), annotations, and scoring calculation methods used in the game are based on the research paper:
+                    <Text style={{ color: '#3434fe' }} onPress={() => Linking.openURL('https://pubmed.ncbi.nlm.nih.gov/33196488/')}>
+                        {'  '}A. Madani et al., “Artificial intelligence for intraoperative guidance: using semantic segmentation to identify surgical anatomy during laparoscopic cholecystectomy,” Annals of surgery, 2022.
+                    </Text>
                 </Text>
                 <Text style={styles.tcP}>
-                    {'\u2022'} For more information please email gamification@ap-lab.ca
+                We are looking for General Surgery residents, fellows, and surgeon volunteers to take part in a study.
+                The objective of the Lapbot game is to identify where it is safe to dissect during a laparoscopic
+                cholecystectomy. We are assessing the impact on learning curve through gamification and exploring
+                different visualization and interaction techniques.
+                If you volunteer to be in this study:
                 </Text>
                 <Text style={styles.tcP}>
-                    {'\u2022'} If you wish to have any data connected to you deleted prior to January 2023,
-                    please visit the player profile page or email us.
+                {'\u25CF'} The game has 5 levels of difficulty{'\n'}
+                {'\u25CF'} Answer in-app questions{'\n'}
+                {'\u25CF'} Compete for a chance to win a prize{'\n'}
+                {'\u25CF'} Answer an online survey after playing the game
                 </Text>
-                <TouchableOpacity style={styles.acceptButtonContainer} onPress={() => {
+                <Text style={styles.tcP}>
+                We are sending you information about this study, including why it is being done, what you will be
+                asked to do, benefits and potential risks to you, information about privacy and confidentiality, and
+                whom to contact with questions. <Text style={styles.innerBoldText}>This is called a Consent Form.</Text>
+                </Text>
+                <Text style={styles.tcP}>
+                If you think you may want to participate in the study, you may proceed further by clicking the &#39;Next&#39;
+                button otherwise, you can simply close this page.
+                </Text>
+                <Text style={styles.tcP}>
+                Clicking, the &#39;Next&#39; button will allow you to view the Consent Form on your screen. If you have any
+                questions about the study, please contact the study team using the contact information on the
+                Consent Form.
+                </Text>
+                <Text style={styles.tcP}>
+                    If you wish to have any data connected to you deleted please email lapBot@ap-lab.ca
+                </Text>
+                <Text style={styles.tcP}>
+                    Please click the &#39;Next &#39; button to continue.
+                </Text>
+                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', margin: 15 }} onPress={() => { setToggleCheckBox(!toggleCheckBox) }}>
+                    <CheckBox
+                        disabled={false}
+                        value={toggleCheckBox}
+                        onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                    />
+                    <Text style={{ marginLeft: 15, color: '#4d4d4d', fontSize: 18, fontFamily: 'GillSans', }}>
+                        Accept the terms of service
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity disabled={!toggleCheckBox} style={[styles.acceptButtonContainer, toggleCheckBox ? { backgroundColor: '#33B957' } : { backgroundColor: 'silver' }]} onPress={() => {
+                    AsyncStorage.setItem('alreadyLaunchedOnboarding', 'true');
+                    navigation.navigate("StudyConsent")
+                }}>
+                    <Text style={styles.acceptButtonText}>Next</Text>
+                </TouchableOpacity>
+            </View>
+        </ScrollView>
+    )
+}
+
+const consentDetailButton = (navigation, toggleCheckBox, setToggleCheckBox) => {
+    return (
+        <ScrollView>
+            <View style={{ alignItems: 'baseline', marginLeft: 20, marginRight: 20, marginBottom: 150 }}>
+                <Text style={styles.tcP}>
+                    The data (including images and videos), annotations, and scoring calculation methods used in the game are based on the research paper:
+                    <Text style={{ color: '#3434fe' }} onPress={() => Linking.openURL('https://pubmed.ncbi.nlm.nih.gov/33196488/')}>
+                        {'  '}A. Madani et al., “Artificial intelligence for intraoperative guidance: using semantic segmentation to identify surgical anatomy during laparoscopic cholecystectomy,” Annals of surgery, 2022.
+                    </Text>
+                </Text>
+                <Text style={styles.tcP}>
+                    The purpose of this research is to study how AI annotations of safe and unsafe dissection zones in surgical scenes can improve surgical decision-making.
+                    There are no foreseen risks or benefits of playing this game.
+                </Text>
+                <Text style={styles.tcP}>
+                    This game collects and uses data from the embedded questionnaires and game to enable core gameplay (e.g. saving your progress and score) and to answer research questions about the best way to display medical and surgical data. To help support our research, we ask for your consent to collect this in-app data.
+                </Text>
+                <Text style={styles.tcP}>
+                    For more information please email lapBot@ap-lab.ca
+                </Text>
+                <Text style={styles.tcP}>
+                    If you wish to have any data connected to you deleted please email us.
+                </Text>
+                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', margin: 15 }} onPress={() => { setToggleCheckBox(!toggleCheckBox) }}>
+                    <CheckBox
+                        disabled={false}
+                        value={toggleCheckBox}
+                        onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                    />
+                    <Text style={{ marginLeft: 15, color: '#4d4d4d', fontSize: 18, fontFamily: 'GillSans', }}>
+                        Accept the terms of service
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity disabled={!toggleCheckBox} style={[styles.acceptButtonContainer, toggleCheckBox ? { backgroundColor: '#33B957' } : { backgroundColor: 'silver' }]} onPress={() => {
                     AsyncStorage.setItem('alreadyLaunchedOnboarding', 'true');
                     navigation.navigate("Register")
                 }}>
-                    <Text style={styles.acceptButtonText}>Accept</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.refuseButtonContainer} onPress={() => onboardingRef.current.goToPage(0, true)}>
-                    <Text style={styles.refuseButtonText}>Refuse</Text>
+                    <Text style={styles.acceptButtonText}>Next</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>
@@ -152,6 +233,14 @@ const consentDetailButton = (navigation, onboardingRef) => {
 export default OnboardingScreen
 
 const styles = StyleSheet.create({
+    consentScrollView: {
+        height: windowHeight / 3,
+        borderWidth:2,
+        padding:5,
+    },
+    innerBoldText: {
+        fontWeight: 'bold',
+    },
     container: {
         flex: 1,
         alignItems: 'center',
@@ -210,7 +299,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         width: '100%',
         height: windowHeight / 15,
-        backgroundColor: '#33B957',
+        //backgroundColor: '#33B957',
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',

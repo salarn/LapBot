@@ -61,16 +61,27 @@ const DemographicQuestionScreen = ({ navigation }) => {
     )
   }
 
-  const AddInfoButtonPress = () => {
+  const AddInfoButtonPress = (skipThePage) => {
     var formdata = new FormData();
     var responseStatus = 0
-    formdata.append("nickname", userToken)
-    formdata.append("q1", answer1.value)
-    formdata.append("q2", answer2.value)
-    formdata.append("q3", answer3.value)
-    formdata.append("q4", answer4.value)
-    formdata.append("q5", answer5.value)
-    formdata.append("q6", answer6.value)
+    if(skipThePage == true){
+      formdata.append("nickname", userToken)
+      formdata.append("q1", 'Other')
+      formdata.append("q2", '00')
+      formdata.append("q3", '00')
+      formdata.append("q4", '00')
+      formdata.append("q5", 'CA')
+      formdata.append("q6", '00')
+    }
+    else{
+      formdata.append("nickname", userToken)
+      formdata.append("q1", answer1.value)
+      formdata.append("q2", answer2.value)
+      formdata.append("q3", answer3.value)
+      formdata.append("q4", answer4.value)
+      formdata.append("q5", answer5.value)
+      formdata.append("q6", answer6.value)
+    }
     const requestOptions = {
       method: 'POST',
       body: formdata,
@@ -177,10 +188,17 @@ const DemographicQuestionScreen = ({ navigation }) => {
         />
         <FormButton
           buttonTitle="Add my info"
-          onPress={() => AddInfoButtonPress()}
+          onPress={() => AddInfoButtonPress(false)}
           disabled={buttonDisabled()}
         />
+        <FormButton
+          buttonTitle="Skip"
+          onPress={() => AddInfoButtonPress(true)}
+          //disabled={buttonDisabled()}
+        />
+        {/*
         <Text style={{ color: "red", marginTop: 10 }}>*Please answer all the questions then push the button</Text>
+        */}
       </ScrollView>
     </Background >
   )

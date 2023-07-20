@@ -34,7 +34,7 @@ const LoginScreen = ({ navigation }) => {
 
       <FormButton
         buttonTitle="Create Account"
-        onPress={() => navigation.push("Register")}
+        onPress={() => navigation.push("StudyConsent")}
       />
     </ImageBackground>
   );

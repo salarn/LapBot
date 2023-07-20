@@ -1,6 +1,7 @@
 PODS:
   - A0Auth0 (2.13.1):
     - React
+  - BEMCheckBox (1.4.1)
   - boost-for-react-native (1.63.0)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
@@ -395,17 +396,13 @@ PODS:
     - React-perflogger (= 0.64.3)
   - RNCAsyncStorage (1.17.3):
     - React-Core
+  - RNCCheckbox (0.5.15):
+    - BEMCheckBox (~> 1.4)
+    - React-Core
   - RNCMaskedView (0.1.11):
     - React
   - RNCPicker (2.4.1):
     - React-Core
-  - RNFBApp (14.8.1):
-    - Firebase/CoreOnly (= 8.15.0)
-    - React-Core
-  - RNFBAuth (14.7.0):
-    - Firebase/Auth (= 8.15.0)
-    - React-Core
-    - RNFBApp
   - RNGestureHandler (1.10.3):
     - React-Core
   - RNReanimated (2.8.0):
@@ -505,10 +502,9 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
-  - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
-  - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -518,6 +514,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - BEMCheckBox
     - boost-for-react-native
     - CocoaAsyncSocket
     - Firebase
@@ -614,14 +611,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCCheckbox:
+    :path: "../node_modules/@react-native-community/checkbox"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
-  RNFBApp:
-    :path: "../node_modules/@react-native-firebase/app"
-  RNFBAuth:
-    :path: "../node_modules/@react-native-firebase/auth"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -637,6 +632,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   A0Auth0: 650e33fc16ba6412322bdb7c500f1e9119c2eb04
+  BEMCheckBox: 5ba6e37ade3d3657b36caecc35c8b75c6c2b1a4e
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
@@ -666,7 +662,7 @@ SPEC CHECKSUMS:
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: d34bf57e17cb6e3b2681f4809b13843c021feb6c
   RCTTypeSafety: 8dab4933124ed39bb0c1d88d74d61b1eb950f28f
-  RCTYouTube: 13fdb790b6339111cb7191427cac8708a8a09215
+  RCTYouTube: a8bb45705622a6fc9decf64be04128d3658ed411
   React: ef700aeb19afabff83a9cc5799ac955a9c6b5e0f
   React-callinvoker: 5547633d44f3e114b17c03c660ccb5faefd9ed2d
   React-Core: 3858d60185d71567962468bf176d582e36e4e25b
@@ -677,9 +673,9 @@ SPEC CHECKSUMS:
   React-jsinspector: 34e23860273a23695342f58eed3ffd3ba10c31e0
   react-native-flipper: e3da3457a7cb984b4beaddecb587674a8545b71d
   react-native-get-pixel-color: 68005d505be66fd0329f65e67b2a3db83154fde3
-  react-native-orientation: d4a97266b06ec8d45d74e626656a730ebbebbb6f
-  react-native-safe-area-context: 5b8a418400eb3d8364aa87300e865c0262cc17b9
-  react-native-video: aa527b0acb37f94c4491e70df0274cb26979405d
+  react-native-orientation: f1caf84d65f1a4fd4511a18f2b924e634ad7a628
+  react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
+  react-native-video: eee541262ada11bc7ffe8ec5508e6a877937c462
   React-perflogger: cc76a4254d19640f1d8ad1c66fdee800414b805c
   React-RCTActionSheet: 7448f049318d8d7e8a9a1ebb742ada721757eea8
   React-RCTAnimation: fb9b3fa1a4a9f5e6ab01b3368693ce69860ba76a
@@ -692,15 +688,14 @@ SPEC CHECKSUMS:
   React-RCTVibration: c7f845861e79eae13dc1e8217a3cf47a3945b504
   React-runtimeexecutor: 493d9abb8b23c3f84e19ae221eeba92cadcb70dc
   ReactCommon: 8fea6422328e2fc093e25c9fac67adbcf0f04fb4
-  RNCAsyncStorage: bef53cb70c06b8eff11bab4a848de86ad4488c39
-  RNCMaskedView: f127cd9652acfa31b91dcff613e07ba18b774db6
+  RNCAsyncStorage: 005c0e2f09575360f142d0d1f1f15e4ec575b1af
+  RNCCheckbox: 43bcc6493611468af0e19f19f029dab3da8561c4
+  RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: abc646b53a3d28ccfa3232c927a0ca52e0cf024d
-  RNFBApp: 6aa068869d959488039cbceb2d830f53d4136c72
-  RNFBAuth: 192fab090f9af9b203a7599bbc358019c42eae09
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: 7f3eef39b48facdb0b053873abdaafaa6a953b0d
   RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
-  RNSketchCanvas: 6939b18677cd1794151cc3d8eb5a0a2158a4a05b
+  RNSketchCanvas: 9c28adb5381543ed55cc98ce6de46479cb3cb12c
   RNVectorIcons: 7923e585eaeb139b9f4531d25a125a1500162a0b
   Yoga: e6ecf3fa25af9d4c87e94ad7d5d292eedef49749
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

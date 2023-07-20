@@ -7,6 +7,7 @@ import LoginScreen from '../screens/LoginScreen'
 import SignupScreen from '../screens/SignupScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import RegisterScreen from '@/screens/RegisterScreen'
+import ConsentStudyScreen from '@/screens/ConsentStudy'
 
 const Stack = createNativeStackNavigator()
 
@@ -48,6 +49,11 @@ const AuthStack = () => {
       <Stack.Screen
         name="Register"
         component={RegisterScreen}
+        options={{ header: () => null, orientation: 'portrait' }}
+      />
+      <Stack.Screen
+        name="StudyConsent"
+        component={ConsentStudyScreen}
         options={{ header: () => null, orientation: 'portrait' }}
       />
       <Stack.Screen

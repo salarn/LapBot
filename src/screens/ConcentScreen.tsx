@@ -24,17 +24,15 @@ const ConcentScreen = ({ navigation }) => {
           style={styles.tcContainer}
         >
           <Text style={styles.tcP}>
-            This game collects and uses data from the embedded questionnaires and game to enable
-            core gameplay (e.g. saving your progress and score) and to answer research questions
-            about the best way to display medical and surgical data. To help support our research,
-            we ask for your consent to collect this in-app data.
+            The purpose of this research is to study how AI annotations of safe and unsafe dissection zones in surgical scenes can improve surgical decision-making.
+            There are no foreseen risks or benefits of playing this game.
+            This game collects and uses data from the embedded questionnaires and game to enable core gameplay (e.g. saving your progress and score) and to answer research questions about the best way to display medical and surgical data. To help support our research, we ask for your consent to collect this in-app data.
           </Text>
           <Text style={styles.tcL}>
             {'\u2022'} For more information please email gamification@ap-lab.ca
           </Text>
           <Text style={styles.tcL}>
-            {'\u2022'}  If you wish to have any data connected to you deleted prior to January 2023,
-            please visit the player profile page or email us.
+            {'\u2022'}  If you wish to have any data connected to you deleted please email us.
           </Text>
         </ScrollView>
         <TouchableOpacity

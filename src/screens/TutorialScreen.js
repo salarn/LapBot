@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   ImageBackground,
+  Linking,
 } from 'react-native';
 import Video from 'react-native-video';
 import FormButton from '../Components/FormButton';
@@ -28,6 +29,9 @@ const TutorialScreen = ({ navigation }) => {
       <View style={styles.container}>
         <Text style={{ fontFamily: 'GillSans-SemiBold', marginTop: 20, fontSize: 45, alignSelf: 'center' }}>Tutorial</Text>
         <ScrollView style={{ paddingTop: 0 }}>
+        <Text style={styles.text}>All videos and annotations are from the work of  <Text style={{ color: '#3434fe' }} onPress={() => Linking.openURL('https://pubmed.ncbi.nlm.nih.gov/33196488/')}>
+                        {''}A. Madani et al. 2022
+                    </Text> </Text>
           <Text style={styles.text}>The objective of this game is to identify where it is safe to dissect during a laparoscopic cholecystectomy.</Text>
           <Image source={require('../Assets/Images/TutorialImage1.png')} style={{ width: '100%', height: 300, marginTop: 20, borderRadius: 20 }} />
           <Text style={styles.text}>You will be provided with a sample scenario - remember you can watch a video for that scenario before submitting your answer.</Text>

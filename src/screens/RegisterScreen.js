@@ -43,9 +43,10 @@ const RegisterScreen = ({ navigation }) => {
     var responseStatus = 0
     formdata.append("nickname", name.value)
     formdata.append("email", email.value)
-    formdata.append("gender", gender.value)
-    formdata.append("age", age.value)
-    console.log(name.value + " 1 " + email.value + " 2 " + gender.value + " 3 " + age.value)
+    //formdata.append("gender", gender.value)
+    //formdata.append("age", age.value)
+    formdata.append("gender", 'OptionalIos')
+    formdata.append("age", '1')
     const requestOptions = {
       method: 'POST',
       body: formdata,
@@ -100,6 +101,7 @@ const RegisterScreen = ({ navigation }) => {
           textContentType="emailAddress"
           keyboardType="email-address"
         />
+        {/*
         <TextInput
           label="Age"
           returnKeyType="done"
@@ -130,6 +132,7 @@ const RegisterScreen = ({ navigation }) => {
           </SelectPicker>
           {gender.error ? <Text style={styles.genderError}>{gender.error}</Text> : null}
         </View>
+            */}
         <FormButton
           buttonTitle="Sign Up"
           onPress={() => onSignUpPressed()}

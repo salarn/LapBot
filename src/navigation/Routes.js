@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { View, ActivityIndicator } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import auth from '@react-native-firebase/auth';
 import auth0 from './auth0';
 import AuthStack from './AuthStack';
 import AppStack from './AppStack';
