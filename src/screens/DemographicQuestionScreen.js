@@ -66,7 +66,7 @@ const DemographicQuestionScreen = ({ navigation }) => {
     var responseStatus = 0
     if(skipThePage == true){
       formdata.append("nickname", userToken)
-      formdata.append("q1", 'Other')
+      formdata.append("q1", answer1.value)
       formdata.append("q2", '00')
       formdata.append("q3", '00')
       formdata.append("q4", '00')
@@ -104,6 +104,11 @@ const DemographicQuestionScreen = ({ navigation }) => {
       return true
     return false
   }
+  const skipButtonDisabled = () =>{
+    if (answer1.value == '')
+      return true
+    return false
+  }
   useEffect(() => {
     AsyncStorage.getItem('userToken').then((value) => {
       userToken = value
@@ -114,6 +119,7 @@ const DemographicQuestionScreen = ({ navigation }) => {
     <Background>
       <ScrollView style={{ width: '100%', height: '100%' }}>
         <Header>Demographic Questions</Header>
+        <Text style={{ color: "#404040", marginTop: 0, fontSize: 20,fontWeight: 'bold', }}>Mandatory:</Text>
         <ViewGeneratorMultiAns
           containerStyle={styles.pickerContainer}
           placeholder='Role'
@@ -124,6 +130,7 @@ const DemographicQuestionScreen = ({ navigation }) => {
           inputOptions={WhatAreyouOption}
           errorStyle={styles.pickerError}
         />
+        <Text style={{ color: "#404040", marginTop: 10, fontSize: 20,fontWeight: 'bold', }}>Optoinal but recommended:</Text>
         <ViewGeneratorMultiAns
           containerStyle={styles.pickerContainer}
           placeholder='Game experience'
@@ -191,14 +198,12 @@ const DemographicQuestionScreen = ({ navigation }) => {
           onPress={() => AddInfoButtonPress(false)}
           disabled={buttonDisabled()}
         />
+        <Text style={{ color: "red", marginTop: 10 }}>For enhanced research outcomes, kindly complete the optional sections and select "Add My Info" instead of choosing "Skip."</Text>
         <FormButton
           buttonTitle="Skip"
           onPress={() => AddInfoButtonPress(true)}
-          //disabled={buttonDisabled()}
+          disabled={skipButtonDisabled()}
         />
-        {/*
-        <Text style={{ color: "red", marginTop: 10 }}>*Please answer all the questions then push the button</Text>
-        */}
       </ScrollView>
     </Background >
   )
