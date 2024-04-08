@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+/*import React, { useState } from 'react'
 
 import {
   View,
@@ -101,3 +101,4 @@ const styles = {
 }
 
 export default ConcentScreen
+*/

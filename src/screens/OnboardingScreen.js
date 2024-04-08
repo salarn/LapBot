@@ -142,22 +142,12 @@ const consentDetailButton2 = (navigation, toggleCheckBox, setToggleCheckBox) => 
                 <Text style={styles.tcP}>
                 {'\u25CF'} The game has 5 levels of difficulty{'\n'}
                 {'\u25CF'} Answer in-app questions{'\n'}
-                {'\u25CF'} Compete for a chance to win a prize{'\n'}
                 {'\u25CF'} Answer an online survey after playing the game
                 </Text>
-                <Text style={styles.tcP}>
-                We are sending you information about this study, including why it is being done, what you will be
-                asked to do, benefits and potential risks to you, information about privacy and confidentiality, and
-                whom to contact with questions. <Text style={styles.innerBoldText}>This is called a Consent Form.</Text>
-                </Text>
+                
                 <Text style={styles.tcP}>
                 If you think you may want to participate in the study, you may proceed further by clicking the &#39;Next&#39;
                 button otherwise, you can simply close this page.
-                </Text>
-                <Text style={styles.tcP}>
-                Clicking, the &#39;Next&#39; button will allow you to view the Consent Form on your screen. If you have any
-                questions about the study, please contact the study team using the contact information on the
-                Consent Form.
                 </Text>
                 <Text style={styles.tcP}>
                     If you wish to have any data connected to you deleted please email lapBot@ap-lab.ca
@@ -177,7 +167,7 @@ const consentDetailButton2 = (navigation, toggleCheckBox, setToggleCheckBox) => 
                 </TouchableOpacity>
                 <TouchableOpacity disabled={!toggleCheckBox} style={[styles.acceptButtonContainer, toggleCheckBox ? { backgroundColor: '#33B957' } : { backgroundColor: 'silver' }]} onPress={() => {
                     AsyncStorage.setItem('alreadyLaunchedOnboarding', 'true');
-                    navigation.navigate("StudyConsent")
+                    navigation.navigate("Register")
                 }}>
                     <Text style={styles.acceptButtonText}>Next</Text>
                 </TouchableOpacity>

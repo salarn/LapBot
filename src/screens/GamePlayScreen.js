@@ -123,8 +123,9 @@ const GamePlayScreen = ({ navigation, route }) => {
                   }]} />
                 <View style={{ position: 'absolute', left: 0, top: 0, width: GameFrameWidth, height: GameFrameHeight }}
                   onTouchStart={(e) => {
-                    setLastTouchX(e.nativeEvent.locationX)
-                    setLastTouchY(e.nativeEvent.locationY)
+                    console.log("SalamSalam");
+                    //setLastTouchX(e.nativeEvent.locationX)
+                    //setLastTouchY(e.nativeEvent.locationY)
                   }} />
               </View>
             ) : (
