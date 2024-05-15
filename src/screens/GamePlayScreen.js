@@ -40,9 +40,6 @@ const roundPassLimit = 50
 const arr = [1, 2, 3, 4, 5]
 
 const GamePlayScreen = ({ navigation, route }) => {
-  const [lastTouchX, setLastTouchX] = useState(null)
-  const [lastTouchY, setLastTouchY] = useState(null)
-  const [lastScore, setLastScore] = useState(null)
   const [quizVisible, setQuizVisible] = useState(true)
   const [modalConfVisible, setModalConfVisible] = useState(false)
   const [confidentLevel, setConfidentLevel] = useState(3)
@@ -51,6 +48,9 @@ const GamePlayScreen = ({ navigation, route }) => {
   const [timerStarted, setTimerStarted] = useState(false)
   const { levelNumber, roundNumber } = route.params
   const [clickedOnVideo, setClickedOnVideo] = useState(false)
+  const [lastTouchX, setLastTouchX] = useState(null)
+  const [lastTouchY, setLastTouchY] = useState(null)
+  const [lastScore, setLastScore] = useState(null)
 
 
   let temp = Image.resolveAssetSource(GameData.heatmapFrame[levelNumber][RoundsCalculationMod(levelNumber, roundNumber)])
@@ -81,12 +81,14 @@ const GamePlayScreen = ({ navigation, route }) => {
     return () => clearInterval(interval)
   }, [timerCount, modalConfVisible])
 
-  useEffect(async () => {
-    if (lastTouchX != null) {
-      let currentScore = await ScoreCalculator(lastTouchX / GameFrameWidth, lastTouchY / GameFrameHeight, levelNumber, roundNumber, OriginalFrameWidth, OriginalFrameHeight)
-      //console.log("##" + currentScore)
-      setLastScore(currentScore)
-    }
+  useEffect(() => {
+    (async () => {
+      if (lastTouchX != null) {
+        let currentScore = await ScoreCalculator(lastTouchX / GameFrameWidth, lastTouchY / GameFrameHeight, levelNumber, roundNumber, OriginalFrameWidth, OriginalFrameHeight)
+        //console.log("##***&& " + currentScore)
+        setLastScore(currentScore)
+      }
+    })();
   }, [lastTouchX])
 
   useEffect(() => {
@@ -123,9 +125,8 @@ const GamePlayScreen = ({ navigation, route }) => {
                   }]} />
                 <View style={{ position: 'absolute', left: 0, top: 0, width: GameFrameWidth, height: GameFrameHeight }}
                   onTouchStart={(e) => {
-                    console.log("SalamSalam");
-                    //setLastTouchX(e.nativeEvent.locationX)
-                    //setLastTouchY(e.nativeEvent.locationY)
+                    setLastTouchX(e.nativeEvent.locationX)
+                    setLastTouchY(e.nativeEvent.locationY)
                   }} />
               </View>
             ) : (
@@ -206,7 +207,11 @@ const GamePlayScreen = ({ navigation, route }) => {
             <TouchableOpacity
               style={styles.buttonNext}
               //onPress={() => setModalConfVisible(!modalConfVisible)}
-              onPress={() => GoToFeedbackScreen(navigation, lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber, timerCount)}
+              onPress={() => {
+                  setModalConfVisible(!modalConfVisible)
+                  setTimeout(() => {GoToFeedbackScreen(navigation, lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber, timerCount)}, 1000)
+                }
+              }
             >
               <Text style={styles.textStyle}>Next</Text>
             </TouchableOpacity>
@@ -243,10 +248,11 @@ const sendVideoClickFeedbackToServer = (levelNumber, roundNumber, bingoNumber) =
 
 // FeedBack Screen & Go to next Round
 const GoToFeedbackScreen = (navigation, lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber, timerCount) => {
+  console.log("##1")
   // next round
   let nextRound = parseInt(roundNumber) + 1;
   AsyncStorage.setItem('roundNumber', String(nextRound))
-
+  console.log("##2")
   // bingo plus
   if (lastScore >= roundPassLimit) {
     bingoNumber += 1;
@@ -255,10 +261,10 @@ const GoToFeedbackScreen = (navigation, lastScore, lastTouchX, lastTouchY, confi
   else {
     AsyncStorage.setItem('bingoNumber', "0")
   }
-
+  console.log("##3")
   // Send the record to server
   sendRecordToServer(lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber, timerCount)
-
+  console.log("##5")
   navigation.replace('Feedback', { lastScore, lastTouchX, lastTouchY, levelNumber, roundNumber, GameFrameWidth, GameFrameHeight, userToken })
 }
 const sendRecordToServer = (lastScore, lastTouchX, lastTouchY, confidentLevel, levelNumber, roundNumber, bingoNumber, timerCount) => {
@@ -273,6 +279,7 @@ const sendRecordToServer = (lastScore, lastTouchX, lastTouchY, confidentLevel, l
   formdata.append("roundNumber", roundNumber)
   formdata.append("bingoNumber", bingoNumber)
   formdata.append("timerCount", timerCount)
+  console.log("##4")
   const requestOptions = {
     method: 'POST',
     body: formdata,
